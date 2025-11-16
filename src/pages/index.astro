@@ -2,10 +2,10 @@
 import "../styles/global.css";
 import { getCollection } from "astro:content";
 import "@fontsource-variable/space-grotesk";
+import { Container } from "@/components/ui/container";
+import { Content } from "@/components/Content";
 import Header from "@/components/Header.astro";
-import Container from "@/components/Container.astro";
 import LikedDishes from "@/components/LikedDishes.astro";
-import Content from "@/components/Content.astro";
 
 const sections = await getCollection("menu");
 const menu = sections.map((section) => ({
@@ -25,7 +25,7 @@ const menu = sections.map((section) => ({
   </head>
   <body class="flex flex-col min-h-screen">
     <Header />
-    <Container class="flex flex-col md:flex-row">
+    <Container className="flex flex-col md:flex-row">
       <main class="flex flex-col flex-1 order-2 md:order-1">
         <nav>
           <ul class="flex flex-wrap gap-x-2 gap-y-6">
@@ -50,7 +50,7 @@ const menu = sections.map((section) => ({
             Innehåll senast kontrollerad: {new Date().toLocaleDateString()}
           </p>
           <section class="my-8">
-            <Content menu={sections} />
+            <Content client:load menu={sections} />
           </section>
         </section>
       </main>
@@ -58,7 +58,7 @@ const menu = sections.map((section) => ({
     </Container>
     <footer class="mt-auto">
       <Container
-        class="flex flex-col text-center space-y-1 items-center justify-center py-8 border-t border-neutral-300"
+        className="flex flex-col text-center space-y-1 items-center justify-center py-8 border-t border-neutral-300"
       >
         <p>
           Denna sida är inte på något sätt associerad med Cherry Woken. Den
