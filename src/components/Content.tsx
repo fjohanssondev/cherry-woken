@@ -67,7 +67,7 @@ function Content({ menu }: Props) {
                           </div>
 
                           {item.subItems && item.subItems.length > 0 && (
-                            <ul className="ml-11 mt-2 space-y-1 text-sm text-neutral-600">
+                            <ul className="ml-4 mt-2 space-y-1 text-sm text-neutral-600">
                               {item.subItems.map((subItem, idx) => (
                                 <li key={idx}>- {subItem}</li>
                               ))}
