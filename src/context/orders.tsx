@@ -1,8 +1,14 @@
 import { createContext, useContext, useState } from "react";
 
+export type MenuItem = {
+  id: string;
+  title: string;
+  order: number;
+};
+
 type OrdersContextType = {
-  orders: string[];
-  setOrders: React.Dispatch<React.SetStateAction<string[]>>;
+  orders: MenuItem[];
+  setOrders: React.Dispatch<React.SetStateAction<MenuItem[]>>;
 };
 
 export const OrdersContext = createContext<OrdersContextType | null>(null);
@@ -12,7 +18,7 @@ interface OrdersProviderProps {
 }
 
 function OrdersProvider({ children }: OrdersProviderProps) {
-  const [orders, setOrders] = useState<string[]>([]);
+  const [orders, setOrders] = useState<MenuItem[]>([]);
 
   return (
     <OrdersContext.Provider value={{ orders, setOrders }}>
