@@ -46,7 +46,7 @@ function Orders() {
                 tillfälle.
               </DrawerDescription>
             </DrawerHeader>
-            <div className="grid flex-1 auto-rows-min gap-6 px-4">
+            <div className="grid flex-1 auto-rows-min gap-6 px-4 overflow-auto">
               <p className="font-medium">Rätter</p>
               <ul className="flex flex-col space-y-2">
                 {orders.map((order) => (
