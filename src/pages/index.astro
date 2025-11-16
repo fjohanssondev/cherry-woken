@@ -4,6 +4,8 @@ import { Container } from "@/components/ui/container";
 import { MenuApp } from "@/components/MenuApp";
 import LikedDishes from "@/components/LikedDishes.astro";
 import RootLayout from "@/layouts/RootLayout.astro";
+import { OpeningHours } from "@/components/OpeningHours";
+import { ImportantInformation } from "@/components/ImportantInformation";
 
 const sections = await getCollection("menu");
 const menu = sections.map((section) => ({
@@ -34,16 +36,22 @@ const menu = sections.map((section) => ({
           }
         </ul>
       </nav>
-      <section class="mt-8">
-        <div class="flex flex-col space-y-2">
-          <p class="italic text-sm">Innehåll senast kontrollerad: 2025-11-16</p>
-          <p class="italic text-sm">
-            Notera att denna sida inte ägs eller underhålls av Cherry Woken.
-            Information kan vara felaktig.
-          </p>
+      <section class="mt-12">
+        <div class="flex flex-col space-y-4">
+          <!-- <ImportantInformation client:load /> -->
+          <div class="inline-flex">
+            <OpeningHours client:load />
+          </div>
+          <div class="flex flex-col">
+            <p>Dagens lunch: måndag-fredag 11.00 - 14.00</p>
+            <div class="mt-2">
+              <p>Välj bland alla varmrätter i menyn</p>
+              <p>Dryck ingår</p>
+            </div>
+          </div>
         </div>
       </section>
-      <section class="mt-4">
+      <section class="mt-2">
         <MenuApp client:load menu={sections} />
       </section>
     </main>
