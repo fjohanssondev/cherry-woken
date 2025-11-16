@@ -16,7 +16,8 @@
       "@/components/*": ["./src/components/*"],
       "@/lib/*": ["./src/lib/*"],
       "@/context/*": ["./src/context/*"],
-      "@/types": ["./types/index.ts"]
+      "@/types": ["./types/index.ts"],
+      "@/layouts/*": ["./src/layouts/*"]
     }
   }
 }

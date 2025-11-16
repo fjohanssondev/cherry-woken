@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import { Container } from "@/components/ui/container";
 import { MenuApp } from "@/components/MenuApp";
 import LikedDishes from "@/components/LikedDishes.astro";
-import RootLayout from "../layout/RootLayout.astro";
+import RootLayout from "@/layouts/RootLayout.astro";
 
 const sections = await getCollection("menu");
 const menu = sections.map((section) => ({
