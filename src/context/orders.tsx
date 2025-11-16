@@ -1,10 +1,5 @@
+import type { MenuItem } from "@/lib/utils";
 import { createContext, useContext, useState } from "react";
-
-export type MenuItem = {
-  id: string;
-  title: string;
-  order: number;
-};
 
 type OrdersContextType = {
   orders: MenuItem[];

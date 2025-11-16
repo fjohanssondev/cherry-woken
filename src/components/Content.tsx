@@ -1,5 +1,5 @@
 import type { CollectionEntry } from "astro:content";
-import { parseMenuMarkdown } from "@/lib/utils";
+import { parseMenuMarkdown, type MenuItem } from "@/lib/utils";
 import { Container } from "@/components/ui/container";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useOrders } from "@/context/orders";
@@ -10,8 +10,15 @@ interface Props {
 
 function Content({ menu }: Props) {
   const { orders, setOrders } = useOrders();
-  const handleCheckItem = (id: string) => {
-    setOrders([...orders, id]);
+
+  const handleCheckItem = (item: MenuItem) => {
+    setOrders((prev) => {
+      if (prev.some((el) => el.id === item.id)) {
+        return prev.filter((p) => p.id !== item.id);
+      } else {
+        return [...prev, item];
+      }
+    });
   };
 
   return (
@@ -35,8 +42,10 @@ function Content({ menu }: Props) {
                                 {item.id}. {item.name}
                               </span>
                               <Checkbox
-                                checked={orders.includes(item.id)}
-                                onCheckedChange={() => handleCheckItem(item.id)}
+                                checked={orders.some(
+                                  (order) => order.id === item.id
+                                )}
+                                onCheckedChange={() => handleCheckItem(item)}
                               />
                             </div>
                           </div>

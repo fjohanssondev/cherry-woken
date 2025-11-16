@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-interface MenuItem {
+export interface MenuItem {
   id: string;
   name: string;
   price?: string;
