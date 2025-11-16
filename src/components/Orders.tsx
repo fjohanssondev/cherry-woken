@@ -41,7 +41,7 @@ function Orders() {
       {isMobile ? (
         <Drawer>
           <DrawerTrigger asChild className="fixed bottom-5 right-5">
-            <Button size="icon" variant="default">
+            <Button className="w-11 h-11" size="icon" variant="default">
               <ShoppingBasket />
             </Button>
           </DrawerTrigger>
