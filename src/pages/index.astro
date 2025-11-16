@@ -49,6 +49,8 @@ const menu = sections.map((section) => ({
           <p class="italic text-sm">
             Innehåll senast kontrollerad: {new Date().toLocaleDateString()}
           </p>
+        </section>
+        <section class="mt-4">
           <MenuApp client:load menu={sections} />
         </section>
       </main>

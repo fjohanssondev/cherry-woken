@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 export interface MenuItem {
   id: string;
   name: string;
-  price?: string;
+  price: string;
   subItems?: string[];
 }
 
@@ -38,6 +38,7 @@ export function parseMenuMarkdown(markdown: string): MenuItem[] {
         price: mainMatch[3],
         subItems: []
       };
+      console.log(currentItem.price)
       items.push(currentItem);
       continue;
     }
