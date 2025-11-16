@@ -41,12 +41,12 @@ function Content({ menu }: Props) {
                               <span>
                                 {item.id}. {item.name}
                               </span>
-                              <Checkbox
+                              {/* <Checkbox
                                 checked={orders.some(
                                   (order) => order.id === item.id
                                 )}
                                 onCheckedChange={() => handleCheckItem(item)}
-                              />
+                              /> */}
                             </div>
                           </div>
                           {item.price && (

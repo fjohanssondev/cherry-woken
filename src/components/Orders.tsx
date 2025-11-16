@@ -8,7 +8,7 @@ function Orders() {
   }, 0);
 
   return (
-    <div>
+    <div className="hidden">
       <h2 className="font-medium text-lg">Beställning</h2>
       <ul className="flex flex-col space-y-2 mt-2">
         {orders.map((order) => (
