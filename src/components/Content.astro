@@ -6,7 +6,7 @@ const { menu } = Astro.props;
 ---
 
 <Container class="px-0!">
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 mt-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-8">
     {
       menu
         .sort((a, b) => a.data.order - b.data.order)
@@ -32,11 +32,15 @@ const { menu } = Astro.props;
     @apply flex flex-col space-y-2 mb-4 mt-2;
   }
 
+  .menu-content :global(ol) {
+    @apply w-full;
+  }
+
   .menu-content :global(li) {
     @apply flex justify-between;
   }
 
-  .menu-content :global(strong) {
+  .menu-content :global(.price) {
     @apply font-medium;
   }
 </style>

@@ -6,12 +6,12 @@ id: "extras"
 
 **Tillbehör**
 
-- Extra ris - 25 kr
-- Extra grönsaker - 35 kr
-- Extra kött - 40 kr
-- Extra jordnötssås el sötsursås - 25 kr
+- Extra ris <span class="price">25 kr</span>
+- Extra grönsaker <span class="price">35 kr</span>
+- Extra kött <span class="price">40 kr</span>
+- Extra jordnötssås el sötsursås <span class="price">25 kr</span>
 
 **Läsk**
 
-- 33cl - 15 kr
-- 1,5 l - 40 kr
+- 33cl <span class="price">15 kr</span>
+- 1,5 l <span class="price">40 kr</span>
