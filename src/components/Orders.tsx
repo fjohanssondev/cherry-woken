@@ -54,7 +54,7 @@ function Orders() {
                 tillfälle.
               </DrawerDescription>
             </DrawerHeader>
-            <div className="grid flex-1 auto-rows-min gap-6 px-4 overflow-auto">
+            <div className="grid flex-1 auto-rows-min gap-2 px-4 overflow-auto">
               <p className="font-medium">
                 {orders.length > 0
                   ? "Rätter"
@@ -62,8 +62,8 @@ function Orders() {
               </p>
               <ul className="flex flex-col space-y-2">
                 {orders.map((order) => (
-                  <li key={order.id}>
-                    {order.id}. {order.name} - {order.price}
+                  <li className="text-sm text-neutral-800" key={order.id}>
+                    {order.id}. {order.name}
                   </li>
                 ))}
               </ul>
