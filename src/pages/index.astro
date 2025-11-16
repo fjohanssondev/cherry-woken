@@ -46,9 +46,15 @@ const menu = sections.map((section) => ({
           </ul>
         </nav>
         <section class="mt-8">
-          <p class="italic text-sm">
-            Innehåll senast kontrollerad: {new Date().toLocaleDateString()}
-          </p>
+          <div class="flex flex-col space-y-2">
+            <p class="italic text-sm">
+              Innehåll senast kontrollerad: 2025-11-16
+            </p>
+            <p class="italic text-sm">
+              Notera att denna sida inte ägs eller underhålls av Cherry Woken.
+              Information kan vara felaktig.
+            </p>
+          </div>
         </section>
         <section class="mt-4">
           <MenuApp client:load menu={sections} />
