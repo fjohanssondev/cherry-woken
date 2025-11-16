@@ -48,7 +48,7 @@ function Content({ menu }: Props) {
 
                       return (
                         <li key={item.id}>
-                          <div className="flex justify-between items-start">
+                          <div className="flex justify-between items-start space-x-8">
                             <div className="flex items-start gap-3 flex-1">
                               {/* <Checkbox
             checked={selectedItems.has(item.id)}
