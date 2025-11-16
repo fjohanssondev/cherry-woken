@@ -50,14 +50,12 @@ function Content({ menu }: Props) {
                             </div>
                           </div>
                           {item.price && (
-                            <span className="font-medium min-w-14">
-                              {item.price}
-                            </span>
+                            <span className="font-medium">{item.price}</span>
                           )}
                         </div>
 
                         {item.subItems && item.subItems.length > 0 && (
-                          <ul className="ml-11 mt-2 space-y-1 text-sm text-neutral-600">
+                          <ul className="ml-4 mt-2 space-y-1 text-sm text-neutral-600">
                             {item.subItems.map((subItem, idx) => (
                               <li key={idx}>- {subItem}</li>
                             ))}
