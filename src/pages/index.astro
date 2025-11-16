@@ -11,6 +11,7 @@ const sections = await getCollection("menu");
 const menu = sections.map((section) => ({
   title: section.data.title,
   id: section.data.id,
+  order: section.data.order,
 }));
 ---
 
@@ -29,23 +30,29 @@ const menu = sections.map((section) => ({
         <nav>
           <ul class="flex flex-wrap gap-x-2 gap-y-6">
             {
-              menu.map(({ id, title }) => (
-                <li>
-                  <a
-                    class="bg-neutral-50 border border-neutral-300 hover:border-neutral-500 px-4 py-2"
-                    href={`#${id}`}
-                  >
-                    {title}
-                  </a>
-                </li>
-              ))
+              menu
+                .sort((a, b) => a.order - b.order)
+                .map(({ id, title }) => (
+                  <li>
+                    <a
+                      class="bg-neutral-50 border border-neutral-300 hover:border-neutral-500 px-4 py-2"
+                      href={`#${id}`}
+                    >
+                      {title}
+                    </a>
+                  </li>
+                ))
             }
           </ul>
         </nav>
-        <section class="my-8">
-          <Content menu={sections} />
+        <section class="mt-8">
+          <p class="italic text-sm">
+            Innehåll senast kontrollerad: {new Date().toLocaleDateString()}
+          </p>
+          <section class="my-8">
+            <Content menu={sections} />
+          </section>
         </section>
-        <Container class="grid grid-cols-1 md:grid-cols-2 gap-y-8" />
       </main>
       <LikedDishes />
     </Container>

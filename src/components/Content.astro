@@ -1,6 +1,10 @@
 ---
 import Container from "../components/Container.astro";
-import { render } from "astro:content";
+import { render, type CollectionEntry } from "astro:content";
+
+interface Props {
+  menu: CollectionEntry<"menu">[];
+}
 
 const { menu } = Astro.props;
 ---
