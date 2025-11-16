@@ -37,17 +37,17 @@ const menu = sections.map((section) => ({
         </ul>
       </nav>
       <section class="mt-12">
-        <div class="flex flex-col space-y-4">
+        <div class="flex flex-col md:flex-row space-y-4">
           <!-- <ImportantInformation client:load /> -->
-          <div class="inline-flex">
-            <OpeningHours client:load />
-          </div>
-          <div class="flex flex-col">
+          <div class="flex flex-col order-2 md:order-1">
             <p>Dagens lunch: måndag-fredag 11.00 - 14.00</p>
             <div class="mt-2">
               <p>Välj bland alla varmrätter i menyn</p>
               <p>Dryck ingår</p>
             </div>
+          </div>
+          <div class="inline-flex md:ml-auto order-1 mb-4 lg:mb-0">
+            <OpeningHours client:load />
           </div>
         </div>
       </section>
