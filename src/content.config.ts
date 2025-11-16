@@ -10,6 +10,16 @@ const menuCollection = defineCollection({
   }),
 });
 
+const changelogCollection = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/changelog" }),
+  schema: z.object({
+    version: z.string(),
+    date: z.date(),
+    title: z.string().optional(),
+  }),
+});
+
 export const collections = {
   menu: menuCollection,
+  changelog: changelogCollection
 };

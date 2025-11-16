@@ -1,0 +1,56 @@
+---
+import { getCollection } from "astro:content";
+import RootLayout from "@/layouts/RootLayout.astro";
+import { Container } from "@/components/ui/container";
+import { render } from "astro:content";
+
+const changelog = await getCollection("changelog");
+const sortedChangelog = changelog.sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+---
+
+<RootLayout>
+  <main class="mt-8">
+    <Container>
+      <h1 class="text-2xl">CHANGELOG</h1>
+      <section id="changelog" class="mt-8">
+        {
+          sortedChangelog.map(async (entry) => {
+            const { Content } = await render(entry);
+            return (
+              <article class="border-b pb-6">
+                <div class="flex items-baseline gap-4 mb-3">
+                  <h2 class="text-2xl font-semibold">
+                    Version {entry.data.version}
+                  </h2>
+                  <time class="text-neutral-600">
+                    {entry.data.date.toLocaleDateString("sv-SE")}
+                  </time>
+                </div>
+
+                {entry.data.title && (
+                  <p class="text-lg text-neutral-700 mb-3">
+                    {entry.data.title}
+                  </p>
+                )}
+
+                <div class="prose prose-neutral max-w-none">
+                  <Content />
+                </div>
+              </article>
+            );
+          })
+        }
+      </section>
+    </Container>
+  </main>
+</RootLayout>
+
+<style is:global>
+  @reference "../styles/global.css";
+
+  #changelog h3 {
+    @apply font-medium text-xl mb-4 not-first:mt-4;
+  }
+</style>
