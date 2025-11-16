@@ -2,7 +2,7 @@ import { glob } from 'astro/loaders';
 import { defineCollection, z } from 'astro:content';
 
 const menuCollection = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/menu" }),
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/menu" }),
   schema: z.object({
     title: z.string(),
     order: z.number(),
