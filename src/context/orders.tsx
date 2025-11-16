@@ -1,9 +1,9 @@
-import type { MenuItem } from "@/lib/utils";
+import type { MenuItemDish } from "@/types";
 import { createContext, useContext, useState } from "react";
 
 type OrdersContextType = {
-  orders: MenuItem[];
-  setOrders: React.Dispatch<React.SetStateAction<MenuItem[]>>;
+  orders: MenuItemDish[];
+  setOrders: React.Dispatch<React.SetStateAction<MenuItemDish[]>>;
 };
 
 export const OrdersContext = createContext<OrdersContextType | null>(null);
@@ -13,7 +13,7 @@ interface OrdersProviderProps {
 }
 
 function OrdersProvider({ children }: OrdersProviderProps) {
-  const [orders, setOrders] = useState<MenuItem[]>([]);
+  const [orders, setOrders] = useState<MenuItemDish[]>([]);
 
   return (
     <OrdersContext.Provider value={{ orders, setOrders }}>
