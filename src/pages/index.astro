@@ -2,10 +2,10 @@
 import "../styles/global.css";
 import { getCollection } from "astro:content";
 import "@fontsource-variable/space-grotesk";
-import Header from "../components/Header.astro";
-import Container from "../components/Container.astro";
-import LikedDishes from "../components/LikedDishes.astro";
-import Content from "../components/Content.astro";
+import Header from "@/components/Header.astro";
+import Container from "@/components/Container.astro";
+import LikedDishes from "@/components/LikedDishes.astro";
+import Content from "@/components/Content.astro";
 
 const sections = await getCollection("menu");
 const menu = sections.map((section) => ({
