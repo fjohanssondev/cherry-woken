@@ -12,13 +12,14 @@ interface Props {
 function Content({ menu }: Props) {
   const { orders, setOrders } = useOrders();
 
-  const handleCheckItem = (item: MenuItemDish) => {
+  const handleCheckChange = (item: MenuItemDish) => {
     setOrders((prev) => {
-      if (prev.some((el) => el.id === item.id)) {
-        return prev.filter((p) => p.id !== item.id);
-      } else {
-        return [...prev, item];
-      }
+      const newOrders = prev.some((el) => el.id === item.id)
+        ? prev.filter((p) => p.id !== item.id)
+        : [...prev, item];
+
+      localStorage.setItem("orders", JSON.stringify(newOrders));
+      return newOrders;
     });
   };
 
@@ -49,13 +50,11 @@ function Content({ menu }: Props) {
                       return (
                         <li key={item.id}>
                           <div className="flex justify-between items-start space-x-8">
-                            <div className="flex items-start gap-3 flex-1">
-                              {/* <Checkbox
-            checked={selectedItems.has(item.id)}
-            onCheckedChange={(checked) => 
-              handleCheckChange(item.id, checked as boolean)
-            }
-          /> */}
+                            <div className="flex items-center gap-3 flex-1">
+                              <Checkbox
+                                checked={orders.some((el) => el.id === item.id)}
+                                onCheckedChange={() => handleCheckChange(item)}
+                              />
                               <span>
                                 {item.showId && `${item.id}. `}
                                 {item.name}
