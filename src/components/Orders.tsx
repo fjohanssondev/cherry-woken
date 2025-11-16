@@ -17,8 +17,6 @@ function Orders() {
   const { orders, setOrders } = useOrders();
   const isMobile = useIsMobile();
 
-  if (orders.length < 1) return null;
-
   const total = orders.reduce((sum, curr) => {
     return sum + Number(curr.price.slice(0, -3));
   }, 0);
@@ -47,7 +45,11 @@ function Orders() {
               </DrawerDescription>
             </DrawerHeader>
             <div className="grid flex-1 auto-rows-min gap-6 px-4 overflow-auto">
-              <p className="font-medium">Rätter</p>
+              <p className="font-medium">
+                {orders.length > 0
+                  ? "Rätter"
+                  : "Du har inte lagt till några rätter"}
+              </p>
               <ul className="flex flex-col space-y-2">
                 {orders.map((order) => (
                   <li key={order.id}>
