@@ -47,22 +47,34 @@ function Content({ menu }: Props) {
                         );
                       }
 
+                      const isChecked = orders.some(
+                        (order) => order.id === item.id
+                      );
+
                       return (
                         <li key={item.id}>
-                          <div className="flex justify-between items-start space-x-8">
-                            <div className="flex items-center gap-3 flex-1">
-                              <Checkbox
-                                checked={orders.some((el) => el.id === item.id)}
-                                onCheckedChange={() => handleCheckChange(item)}
-                              />
-                              <span>
-                                {item.showId && `${item.id}. `}
-                                {item.name}
-                              </span>
+                          <div
+                            onClick={() => handleCheckChange(item)}
+                            className="w-full py-1 text-left cursor-pointer"
+                          >
+                            <div className="flex justify-between items-start space-x-8">
+                              <div className="flex items-center gap-3 flex-1">
+                                <Checkbox
+                                  checked={isChecked}
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="pointer-events-none"
+                                />
+                                <span>
+                                  {item.showId && `${item.id}. `}
+                                  {item.name}
+                                </span>
+                              </div>
+                              {item.price && (
+                                <span className="font-medium">
+                                  {item.price}
+                                </span>
+                              )}
                             </div>
-                            {item.price && (
-                              <span className="font-medium">{item.price}</span>
-                            )}
                           </div>
 
                           {item.subItems && item.subItems.length > 0 && (
