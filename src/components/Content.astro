@@ -37,7 +37,7 @@ const { menu } = Astro.props;
   }
 
   .menu-content :global(ol) {
-    @apply w-full;
+    @apply w-full list-disc;
   }
 
   .menu-content :global(li) {
@@ -46,5 +46,13 @@ const { menu } = Astro.props;
 
   .menu-content :global(.price) {
     @apply font-medium min-w-14;
+  }
+
+  .menu-content :global(.sub) {
+    @apply flex flex-col space-y-2 mb-4 mt-2;
+  }
+
+  .menu-content :global(.sub li) {
+    @apply ml-4;
   }
 </style>

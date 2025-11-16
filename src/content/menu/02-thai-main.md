@@ -4,32 +4,34 @@ order: 2
 id: "thai-main-courses"
 ---
 
-**06. Thailändska Fyra Små Rätter <span class="price">140 kr</span>**
+- 6\. Thailändska Fyra Små Rätter <span class="price">140 kr</span>
 
-- 1 Vårrulle
-- Kyckling m. grönsaker & vitlökchili
-- Kyckling m. jordnötssås
-- Friterade räkor
+<div class="sub">
+<li>- 1st Vårrulle</li>
+<li>- Kyckling m. grönsaker & vitlökchili</li>
+<li>- Kyckling m. jordnötssås</li>
+<li>- Friterade räkor</li>
+</div>
 
-- 7.  Kyckling m. jordnötssås <span class="price">110 kr</span>
-- 8.  Szechuen biff (stark) <span class="price">110 kr</span>
-- 9.  Räkor m. vitlökchili <span class="price">130 kr</span>
-- 10. Räkor m. barbecuesås <span class="price">130 kr</span>
-- 11. Räkor m. massamancurry & cashewnötter <span class="price">130 kr</span>
-- 12. Räkor m. rödcurry <span class="price">130 kr</span>
-- 13. Räkor m. bambuskott & champinjoner <span class="price">130 kr</span>
-- 14. Kyckling m. gröncurry <span class="price">110 kr</span>
-- 15. Kyckling m. rödcurry <span class="price">110 kr</span>
-- 16. Kyckling m. gulcurry <span class="price">110 kr</span>
-- 17. Kyckling m. panangcurry <span class="price">110 kr</span>
-- 18. Kyckling m. massamancurry & cashewnötter <span class="price">115 kr</span>
-- 19. Kyckling m. vitlökchili & cashewnötter <span class="price">115 kr</span>
-- 20. Kyckling m. chilipasta <span class="price">110 kr</span>
-- 21. Stekris med kyckling (innehåller ägg) <span class="price">115 kr</span>
-- 22. Stekta äggnudlar med kyckling <span class="price">115 kr</span>
-- 23. Biff m. vitlökchili <span class="price">110 kr</span>
-- 24. Biff m. massamancurry & cashewnötter <span class="price">115 kr</span>
-- 25. Biff m. panangcurry <span class="price">110 kr</span>
-- 26. Biff m. rödcurry <span class="price">110 kr</span>
-- 27. Szechuen kyckling (stark) <span class="price">110 kr</span>
-- 28. Phad Thai m. kyckling (innehåller jordnötter) <span class="price">115 kr</span>
+- 7\. Kyckling m. jordnötssås <span class="price">110 kr</span>
+- 8\. Szechuen biff (stark) <span class="price">110 kr</span>
+- 9\. Räkor m. vitlökchili <span class="price">130 kr</span>
+- 10\. Räkor m. barbecuesås <span class="price">130 kr</span>
+- 11\. Räkor m. massamancurry & cashewnötter <span class="price">130 kr</span>
+- 12\. Räkor m. rödcurry <span class="price">130 kr</span>
+- 13\. Räkor m. bambuskott & champinjoner <span class="price">130 kr</span>
+- 14\. Kyckling m. gröncurry <span class="price">110 kr</span>
+- 15\. Kyckling m. rödcurry <span class="price">110 kr</span>
+- 16\. Kyckling m. gulcurry <span class="price">110 kr</span>
+- 17\. Kyckling m. panangcurry <span class="price">110 kr</span>
+- 18\. Kyckling m. massamancurry & cashewnötter <span class="price">115 kr</span>
+- 19\. Kyckling m. vitlökchili & cashewnötter <span class="price">115 kr</span>
+- 20\. Kyckling m. chilipasta <span class="price">110 kr</span>
+- 21\. Stekris med kyckling (innehåller ägg) <span class="price">115 kr</span>
+- 22\. Stekta äggnudlar med kyckling <span class="price">115 kr</span>
+- 23\. Biff m. vitlökchili <span class="price">110 kr</span>
+- 24\. Biff m. massamancurry & cashewnötter <span class="price">115 kr</span>
+- 25\. Biff m. panangcurry <span class="price">110 kr</span>
+- 26\. Biff m. rödcurry <span class="price">110 kr</span>
+- 27\. Szechuen kyckling (stark) <span class="price">110 kr</span>
+- 28\. Phad Thai m. kyckling (innehåller jordnötter) <span class="price">115 kr</span>
