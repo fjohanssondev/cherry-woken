@@ -50,10 +50,18 @@ const menu = sections.map((section) => ({
       <LikedDishes />
     </Container>
     <footer class="mt-auto">
-      <Container class="flex justify-center py-8 border-t border-neutral-300">
+      <Container
+        class="flex flex-col space-y-1 items-center justify-center py-8 border-t border-neutral-300"
+      >
         <p>
           Denna sida är inte på något sätt associerad med Cherry Woken. Den
           drivs helt och hållet fristående.
+        </p>
+        <p>
+          Made by: <a
+            class="text-blue-600 hover:underline"
+            href="https://github.com/fjohanssondev">@fjohanssondev</a
+          >
         </p>
       </Container>
     </footer>
