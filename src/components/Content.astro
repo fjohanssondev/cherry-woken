@@ -1,0 +1,42 @@
+---
+import Container from "../components/Container.astro";
+import { render } from "astro:content";
+
+const { menu } = Astro.props;
+---
+
+<Container class="px-0!">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 mt-8">
+    {
+      menu
+        .sort((a, b) => a.data.order - b.data.order)
+        .map(async (section) => {
+          const { Content } = await render(section);
+          return (
+            <section id={section.data.id}>
+              <h2 class="font-medium text-lg">{section.data.title}</h2>
+              <div class="menu-content prose prose-sm mt-3">
+                <Content />
+              </div>
+            </section>
+          );
+        })
+    }
+  </div>
+</Container>
+
+<style>
+  @reference "../styles/global.css";
+
+  .menu-content :global(ul) {
+    @apply flex flex-col space-y-2 mb-4 mt-2;
+  }
+
+  .menu-content :global(li) {
+    @apply flex justify-between;
+  }
+
+  .menu-content :global(strong) {
+    @apply font-medium;
+  }
+</style>
