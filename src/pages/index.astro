@@ -1,11 +1,9 @@
 ---
-import "../styles/global.css";
 import { getCollection } from "astro:content";
-import "@fontsource-variable/space-grotesk";
 import { Container } from "@/components/ui/container";
 import { MenuApp } from "@/components/MenuApp";
-import Header from "@/components/Header.astro";
 import LikedDishes from "@/components/LikedDishes.astro";
+import RootLayout from "../layout/RootLayout.astro";
 
 const sections = await getCollection("menu");
 const menu = sections.map((section) => ({
@@ -15,74 +13,40 @@ const menu = sections.map((section) => ({
 }));
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Meny | Cherry Woken 2</title>
-  </head>
-  <body class="flex flex-col min-h-screen">
-    <Header />
-    <Container className="flex flex-col md:flex-row">
-      <main class="flex flex-col flex-1 order-2 md:order-1">
-        <nav>
-          <ul class="flex flex-wrap gap-x-2 gap-y-6">
-            {
-              menu
-                .sort((a, b) => a.order - b.order)
-                .map(({ id, title }) => (
-                  <li>
-                    <a
-                      class="bg-neutral-50 border border-neutral-300 hover:border-neutral-500 px-4 py-2"
-                      href={`#${id}`}
-                    >
-                      {title}
-                    </a>
-                  </li>
-                ))
-            }
-          </ul>
-        </nav>
-        <section class="mt-8">
-          <div class="flex flex-col space-y-2">
-            <p class="italic text-sm">
-              Innehåll senast kontrollerad: 2025-11-16
-            </p>
-            <p class="italic text-sm">
-              Notera att denna sida inte ägs eller underhålls av Cherry Woken.
-              Information kan vara felaktig.
-            </p>
-          </div>
-        </section>
-        <section class="mt-4">
-          <MenuApp client:load menu={sections} />
-        </section>
-      </main>
-      <LikedDishes />
-    </Container>
-    <footer class="mt-auto">
-      <Container
-        className="flex flex-col text-center space-y-1 items-center justify-center py-8 border-t border-neutral-300"
-      >
-        <p>
-          Denna sida är inte på något sätt associerad med Cherry Woken. Den
-          drivs helt och hållet fristående.
-        </p>
-        <p>
-          Skapad av: <a
-            class="text-blue-600 hover:underline"
-            href="https://github.com/fjohanssondev">@fjohanssondev</a
-          >
-        </p>
-      </Container>
-    </footer>
-  </body>
-</html>
-
-<style>
-  body {
-    font-family: "Space Grotesk Variable", sans-serif;
-  }
-</style>
+<RootLayout>
+  <Container className="flex flex-col md:flex-row">
+    <main class="flex flex-col flex-1 order-2 md:order-1">
+      <nav>
+        <ul class="flex flex-wrap gap-x-2 gap-y-6">
+          {
+            menu
+              .sort((a, b) => a.order - b.order)
+              .map(({ id, title }) => (
+                <li>
+                  <a
+                    class="bg-neutral-50 border border-neutral-300 hover:border-neutral-500 px-4 py-2"
+                    href={`#${id}`}
+                  >
+                    {title}
+                  </a>
+                </li>
+              ))
+          }
+        </ul>
+      </nav>
+      <section class="mt-8">
+        <div class="flex flex-col space-y-2">
+          <p class="italic text-sm">Innehåll senast kontrollerad: 2025-11-16</p>
+          <p class="italic text-sm">
+            Notera att denna sida inte ägs eller underhålls av Cherry Woken.
+            Information kan vara felaktig.
+          </p>
+        </div>
+      </section>
+      <section class="mt-4">
+        <MenuApp client:load menu={sections} />
+      </section>
+    </main>
+    <LikedDishes />
+  </Container>
+</RootLayout>
