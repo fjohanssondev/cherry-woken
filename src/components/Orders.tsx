@@ -55,9 +55,9 @@ function Orders() {
                   </li>
                 ))}
               </ul>
-              <p className="mt-4 font-medium">Total kostnad: {total}kr</p>
             </div>
             <DrawerFooter>
+              <p className="mb-4 font-medium">Total kostnad: {total}kr</p>
               <Button onClick={handleDeleteOrders} variant="default">
                 Rensa beställning
               </Button>
