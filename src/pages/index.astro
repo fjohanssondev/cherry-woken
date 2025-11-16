@@ -4,6 +4,8 @@ import { getCollection } from "astro:content";
 import "@fontsource-variable/space-grotesk";
 import { Container } from "@/components/ui/container";
 import { Content } from "@/components/Content";
+import { Orders } from "@/components/Orders";
+import { OrdersProvider } from "@/context/orders";
 import Header from "@/components/Header.astro";
 import LikedDishes from "@/components/LikedDishes.astro";
 
@@ -49,9 +51,14 @@ const menu = sections.map((section) => ({
           <p class="italic text-sm">
             Innehåll senast kontrollerad: {new Date().toLocaleDateString()}
           </p>
-          <section class="my-8">
-            <Content client:load menu={sections} />
-          </section>
+          <OrdersProvider>
+            <section>
+              <Orders client:load />
+            </section>
+            <section class="my-8">
+              <Content client:load menu={sections} />
+            </section>
+          </OrdersProvider>
         </section>
       </main>
       <LikedDishes />
