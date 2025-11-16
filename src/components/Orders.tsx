@@ -12,10 +12,16 @@ import {
 } from "@/components/ui/drawer";
 import { useIsMobile } from "../hooks/useMobile";
 import { ShoppingBasket } from "lucide-react";
+import { useEffect, useState } from "react";
 
 function Orders() {
   const { orders, setOrders } = useOrders();
   const isMobile = useIsMobile();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const total = orders.reduce((sum, curr) => {
     return sum + Number(curr.price.slice(0, -3));
@@ -25,6 +31,10 @@ function Orders() {
     setOrders([]);
     localStorage.setItem("orders", JSON.stringify([]));
   };
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <>
