@@ -1,6 +1,11 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
-export const OrdersContext = createContext<string[] | null>(null);
+type OrdersContextType = {
+  orders: string[];
+  setOrders: React.Dispatch<React.SetStateAction<string[]>>;
+};
+
+export const OrdersContext = createContext<OrdersContextType | null>(null);
 
 interface OrdersProviderProps {
   children: React.ReactNode;
@@ -10,8 +15,20 @@ function OrdersProvider({ children }: OrdersProviderProps) {
   const [orders, setOrders] = useState<string[]>([]);
 
   return (
-    <OrdersContext.Provider value={orders}>{children}</OrdersContext.Provider>
+    <OrdersContext.Provider value={{ orders, setOrders }}>
+      {children}
+    </OrdersContext.Provider>
   );
 }
 
-export { OrdersProvider };
+function useOrders() {
+  const context = useContext(OrdersContext);
+
+  if (!context) {
+    throw new Error("useOrders must be used within OrdersProvider");
+  }
+
+  return context;
+}
+
+export { OrdersProvider, useOrders };

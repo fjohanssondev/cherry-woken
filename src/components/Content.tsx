@@ -2,12 +2,18 @@ import type { CollectionEntry } from "astro:content";
 import { parseMenuMarkdown } from "@/lib/utils";
 import { Container } from "@/components/ui/container";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useOrders } from "@/context/orders";
 
 interface Props {
   menu: CollectionEntry<"menu">[];
 }
 
 function Content({ menu }: Props) {
+  const { orders, setOrders } = useOrders();
+  const handleCheckItem = (id: string) => {
+    setOrders([...orders, id]);
+  };
+
   return (
     <Container className="px-0!">
       <div className="flex flex-col gap-8 mt-8">
@@ -28,7 +34,10 @@ function Content({ menu }: Props) {
                               <span>
                                 {item.id}. {item.name}
                               </span>
-                              <Checkbox />
+                              <Checkbox
+                                checked={orders.includes(item.id)}
+                                onCheckedChange={() => handleCheckItem(item.id)}
+                              />
                             </div>
                           </div>
                           {item.price && (

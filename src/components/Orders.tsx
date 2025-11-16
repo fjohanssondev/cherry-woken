@@ -1,5 +1,8 @@
+import { useOrders } from "@/context/orders";
+
 function Orders() {
-  return <div>Orders</div>;
+  const { orders } = useOrders();
+  return <div>Orders: {JSON.stringify(orders)}</div>;
 }
 
 export { Orders };
