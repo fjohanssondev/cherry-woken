@@ -82,28 +82,34 @@ function Orders() {
           </DrawerContent>
         </Drawer>
       ) : (
-        <div>
-          <div className="flex items-center">
-            <h2 className="font-medium text-lg">Beställning</h2>
-            <Button
-              onClick={handleDeleteOrders}
-              className="ml-auto"
-              variant="outline"
-            >
-              Rensa
-            </Button>
-          </div>
-          <ul className="flex flex-col space-y-2 mt-2">
-            {orders
-              .sort((a, b) => Number(a.id) - Number(b.id))
-              .map((order) => (
-                <li key={order.id}>
-                  {order.id}. {order.name} - {order.price}
-                </li>
-              ))}
-          </ul>
-          <p className="mt-4 font-medium">Total kostnad: {total}kr</p>
-        </div>
+        <>
+          {orders.length > 0 && (
+            <div>
+              <div className="flex items-center">
+                <h2 className="font-medium text-vibrant text-lg">
+                  Beställning
+                </h2>
+                <Button
+                  onClick={handleDeleteOrders}
+                  className="ml-auto"
+                  variant="outline"
+                >
+                  Rensa
+                </Button>
+              </div>
+              <ul className="flex flex-col space-y-2 mt-2">
+                {orders
+                  .sort((a, b) => Number(a.id) - Number(b.id))
+                  .map((order) => (
+                    <li key={order.id}>
+                      {order.id}. {order.name} - {order.price}
+                    </li>
+                  ))}
+              </ul>
+              <p className="mt-4 font-medium">Total kostnad: {total}kr</p>
+            </div>
+          )}
+        </>
       )}
     </>
   );
