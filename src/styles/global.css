@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 
 @theme {
-  --color-vibrant: #bc1e1e;
+  --color-vibrant: #a31717;
   --color-soft: oklch(0.76 0.12 25);
   --color-pale: oklch(0.88 0.06 25);
   --color-whisper: #fff5f3;

@@ -15,7 +15,7 @@ const menu = sections.map((section) => ({
 ---
 
 <RootLayout>
-  <Container className="flex flex-col md:flex-row mt-8 lg:mt-12">
+  <Container className="flex flex-col md:flex-row mt-8 lg:mt-10">
     <main class="flex flex-col flex-1 order-2 md:order-1">
       <nav>
         <ul class="flex flex-wrap gap-x-4 gap-y-6">
@@ -25,7 +25,7 @@ const menu = sections.map((section) => ({
               .map(({ id, title }) => (
                 <li>
                   <a
-                    class="text-vibrant border-b border-vibrant hover:border-b-2 px-4 py-2"
+                    class="text-vibrant border border-vibrant hover:border-b-2 px-4 py-2"
                     href={`#${id}`}
                   >
                     {title}
@@ -37,11 +37,15 @@ const menu = sections.map((section) => ({
       </nav>
       <section class="mt-12">
         <div class="flex flex-col md:flex-row space-y-4">
-          <div
-            class="flex bg-whisper border border-vibrant px-8 py-4 rounded-lg flex-col order-2 md:order-1"
-          >
-            <p>Dagens lunch: måndag-fredag 11.00 - 14.00</p>
-            <div class="mt-2">
+          <div class="flex flex-col order-2 md:order-1">
+            <div
+              class="flex bg-whisper border border-vibrant px-4 py-2 rounded-lg flex-col"
+            >
+              <p class="font-medium text-vibrant">
+                Dagens lunch: måndag-fredag 11.00 - 14.00
+              </p>
+            </div>
+            <div class="mt-2 text-sm space-y-1 italic">
               <p>Välj bland alla varmrätter i menyn</p>
               <p>Dryck ingår</p>
             </div>
