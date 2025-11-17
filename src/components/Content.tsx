@@ -32,7 +32,9 @@ function Content({ menu }: Props) {
             const items = body ? parseMenuMarkdown(body) : [];
             return (
               <section key={data.id} id={data.id}>
-                <h2 className="font-medium text-lg">{data.title}</h2>
+                <h2 className="font-medium text-vibrant text-lg">
+                  {data.title}
+                </h2>
                 <div className="menu-content mt-3">
                   <ul className="flex flex-col space-y-2 mt-3">
                     {items.map((item) => {
@@ -40,7 +42,7 @@ function Content({ menu }: Props) {
                         return (
                           <h3
                             key={item.id}
-                            className="font-medium text-base mb-2 not-first:mt-2"
+                            className="font-medium text-vibrant text-base mb-2 not-first:mt-2"
                           >
                             {item.name}
                           </h3>

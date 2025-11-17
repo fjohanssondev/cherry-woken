@@ -84,7 +84,7 @@ function Orders() {
       ) : (
         <div>
           <div className="flex items-center">
-            <h2 className="font-medium text-lg">Beställning</h2>
+            <h2 className="font-medium text-vibrant text-lg">Beställning</h2>
             <Button
               onClick={handleDeleteOrders}
               className="ml-auto"
