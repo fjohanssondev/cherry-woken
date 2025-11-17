@@ -61,11 +61,13 @@ function Orders() {
                   : "Du har inte lagt till några rätter"}
               </p>
               <ul className="flex flex-col space-y-2">
-                {orders.map((order) => (
-                  <li className="text-sm text-neutral-800" key={order.id}>
-                    {order.id}. {order.name}
-                  </li>
-                ))}
+                {orders
+                  .sort((a, b) => Number(a.id) - Number(b.id))
+                  .map((order) => (
+                    <li className="text-sm text-neutral-800" key={order.id}>
+                      {order.id}. {order.name}
+                    </li>
+                  ))}
               </ul>
             </div>
             <DrawerFooter>
@@ -92,11 +94,13 @@ function Orders() {
             </Button>
           </div>
           <ul className="flex flex-col space-y-2 mt-2">
-            {orders.map((order) => (
-              <li key={order.id}>
-                {order.id}. {order.name} - {order.price}
-              </li>
-            ))}
+            {orders
+              .sort((a, b) => Number(a.id) - Number(b.id))
+              .map((order) => (
+                <li key={order.id}>
+                  {order.id}. {order.name} - {order.price}
+                </li>
+              ))}
           </ul>
           <p className="mt-4 font-medium">Total kostnad: {total}kr</p>
         </div>
