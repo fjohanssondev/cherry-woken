@@ -11,6 +11,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-
-  integrations: [react(), mdx()]
+  integrations: [react(), mdx()],
+  site: 'https://cherrywoken.se'
 });
