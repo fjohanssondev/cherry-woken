@@ -3,15 +3,29 @@ import "../styles/global.css";
 import "@fontsource-variable/inter";
 import Header from "@/components/Header.astro";
 import { Container } from "@/components/ui/container.tsx";
+
+interface Props {
+  title: string;
+  description: string;
+  noIndex?: boolean;
+}
+
+const { title, description, noIndex = false } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
-<html lang="en">
+<html lang="sv">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Meny | Cherry Woken 2</title>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    {noIndex && <meta name="robots" content="noindex, follow" />}
+
+    <link rel="canonical" href={canonicalURL} />
     <script
       defer
       src="https://cloud.umami.is/script.js"

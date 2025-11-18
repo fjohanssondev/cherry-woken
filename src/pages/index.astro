@@ -14,7 +14,24 @@ const menu = sections.map((section) => ({
 }));
 ---
 
-<RootLayout>
+<RootLayout
+  title="Cherry Woken 2 Meny - Komplett Lista på Alla Rätter"
+  description="Inofficiell sida med Cherry Woken 2:s kompletta meny. Utforska alla asiatiska rätter och priser"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Cherry Woken 2 Meny",
+        "about": {
+          "@type": "FoodEstablishment",
+          "name": "Cherry Woken 2",
+          "servesCuisine": "Asiatisk"
+        }
+      }
+    </script>
+  </Fragment>
   <Container className="flex flex-col md:flex-row mt-8 lg:mt-10">
     <main class="flex flex-col flex-1 order-2 md:order-1">
       <nav>
