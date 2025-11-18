@@ -11,7 +11,7 @@ function OpeningHours() {
       <TooltipTrigger asChild>
         <Button variant="outline">Öppettider</Button>
       </TooltipTrigger>
-      <TooltipContent className="bg-neutral-800 text-white">
+      <TooltipContent className="bg-vibrant text-white">
         <div>
           <h2 className="text-sm font-medium mb-2">Öppettider</h2>
           <p className="text-sm">Måndag - Fredag 11.00 - 20.00</p>
