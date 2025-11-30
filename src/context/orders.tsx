@@ -1,5 +1,5 @@
 import type { MenuItemDish } from "@/types";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 type OrdersContextType = {
   orders: MenuItemDish[];
@@ -14,6 +14,14 @@ interface OrdersProviderProps {
 
 function OrdersProvider({ children }: OrdersProviderProps) {
   const [orders, setOrders] = useState<MenuItemDish[]>([]);
+
+  useEffect(() => {
+    const storage = localStorage.getItem("orders");
+
+    if (storage) {
+      setOrders(JSON.parse(storage));
+    }
+  }, []);
 
   return (
     <OrdersContext.Provider value={{ orders, setOrders }}>

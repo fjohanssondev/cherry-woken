@@ -10,9 +10,7 @@ interface AppProps {
 function MenuApp({ menu }: AppProps) {
   return (
     <OrdersProvider>
-      <section>
-        <Orders />
-      </section>
+      <Orders />
       <section className="my-8">
         <Content menu={menu} />
       </section>

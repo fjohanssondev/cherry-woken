@@ -12,13 +12,14 @@ interface Props {
 function Content({ menu }: Props) {
   const { orders, setOrders } = useOrders();
 
-  const handleCheckItem = (item: MenuItemDish) => {
+  const handleCheckChange = (item: MenuItemDish) => {
     setOrders((prev) => {
-      if (prev.some((el) => el.id === item.id)) {
-        return prev.filter((p) => p.id !== item.id);
-      } else {
-        return [...prev, item];
-      }
+      const newOrders = prev.some((el) => el.id === item.id)
+        ? prev.filter((p) => p.id !== item.id)
+        : [...prev, item];
+
+      localStorage.setItem("orders", JSON.stringify(newOrders));
+      return newOrders;
     });
   };
 
@@ -31,7 +32,9 @@ function Content({ menu }: Props) {
             const items = body ? parseMenuMarkdown(body) : [];
             return (
               <section key={data.id} id={data.id}>
-                <h2 className="font-medium text-lg">{data.title}</h2>
+                <h2 className="font-medium text-vibrant text-lg">
+                  {data.title}
+                </h2>
                 <div className="menu-content mt-3">
                   <ul className="flex flex-col space-y-2 mt-3">
                     {items.map((item) => {
@@ -39,31 +42,41 @@ function Content({ menu }: Props) {
                         return (
                           <h3
                             key={item.id}
-                            className="font-medium text-base mb-2 not-first:mt-2"
+                            className="font-medium text-vibrant text-base mb-2 not-first:mt-2"
                           >
                             {item.name}
                           </h3>
                         );
                       }
 
+                      const isChecked = orders.some(
+                        (order) => order.id === item.id
+                      );
+
                       return (
                         <li key={item.id}>
-                          <div className="flex justify-between items-start space-x-8">
-                            <div className="flex items-start gap-3 flex-1">
-                              {/* <Checkbox
-            checked={selectedItems.has(item.id)}
-            onCheckedChange={(checked) => 
-              handleCheckChange(item.id, checked as boolean)
-            }
-          /> */}
-                              <span>
-                                {item.showId && `${item.id}. `}
-                                {item.name}
-                              </span>
+                          <div
+                            onClick={() => handleCheckChange(item)}
+                            className="w-full py-1 text-left cursor-pointer"
+                          >
+                            <div className="flex justify-between items-start space-x-8">
+                              <div className="flex items-center gap-3 flex-1">
+                                <Checkbox
+                                  checked={isChecked}
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="pointer-events-none"
+                                />
+                                <span>
+                                  {item.showId && `${item.id}. `}
+                                  {item.name}
+                                </span>
+                              </div>
+                              {item.price && (
+                                <span className="font-medium">
+                                  {item.price}
+                                </span>
+                              )}
                             </div>
-                            {item.price && (
-                              <span className="font-medium">{item.price}</span>
-                            )}
                           </div>
 
                           {item.subItems && item.subItems.length > 0 && (
