@@ -68,6 +68,11 @@ export const site = {
     weekday: "11.00 - 20.00",
     weekend: "12.00 - 20.00",
   },
+  lunch: {
+    label: "Dagens lunch",
+    hours: "Mån–fre 11–14",
+    included: "Dryck ingår",
+  },
   order: {
     label: "Beställ & hämta",
     phone: "070 - 740 47 52",

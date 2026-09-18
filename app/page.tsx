@@ -45,6 +45,10 @@ export default function Home() {
                   lines: [site.hours.weekday, site.hours.weekend],
                 },
                 {
+                  label: site.lunch.label,
+                  lines: [site.lunch.hours, site.lunch.included],
+                },
+                {
                   label: site.order.label,
                   lines: [
                     {
