@@ -1,1 +1,1 @@
-# Static-site of a local restaurant
+# Cherry Woken | Static Page
