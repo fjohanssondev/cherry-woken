@@ -30,3 +30,5 @@ export const siteUrl = resolveSiteUrl().replace(/\/+$/, "");
  */
 export const shouldIndex =
   process.env.VERCEL_ENV === "production" || process.env.VERCEL_ENV === undefined;
+
+export const isProduction = process.env.VERCEL_ENV === "production";

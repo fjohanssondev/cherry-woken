@@ -3,8 +3,9 @@ import { Inter, Playfair_Display } from "next/font/google";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { site } from "@/data/menu";
-import { shouldIndex, siteUrl } from "@/lib/site";
+import { isProduction, shouldIndex, siteUrl } from "@/lib/site";
 import "./globals.css";
+import Script from "next/script";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -76,6 +77,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           {children}
         </ThemeProvider>
+        {isProduction ? (
+          <Script
+            strategy="beforeInteractive"
+            src="https://cloud.umami.is/script.js"
+            data-website-id="e0b6fed2-5982-427a-98fb-358abf64449d"
+          />
+        ) : null}
       </body>
     </html>
   );
