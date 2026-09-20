@@ -23,26 +23,6 @@ export function Chili({ className }: { className?: string }) {
   );
 }
 
-/** Hand-drawn arrow that points at the review button. */
-export function ScribbleArrow({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 120 90"
-      aria-hidden="true"
-      fill="none"
-      className={cn("text-gold", className)}
-    >
-      <path
-        d="M6 20c34-14 74-6 96 22M102 42c1-9 1-16 0-21m0 0c-5 2-11 4-18 5"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 /** Stylised hanging Chinese lantern for the header. */
 export function Lantern({ className }: { className?: string }) {
   return (

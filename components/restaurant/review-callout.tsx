@@ -1,4 +1,3 @@
-import { ScribbleArrow } from "@/components/restaurant/icons";
 import { FeedbackDialog } from "@/components/restaurant/feedback-dialog";
 
 export function ReviewCallout({
@@ -19,7 +18,6 @@ export function ReviewCallout({
         </p>
       </div>
       <div className="flex items-center gap-2">
-        <ScribbleArrow className="hidden h-16 w-auto md:block" />
         <FeedbackDialog triggerLabel={cta} />
       </div>
     </div>
