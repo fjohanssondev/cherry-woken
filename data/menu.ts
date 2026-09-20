@@ -58,6 +58,8 @@ export const site = {
   kicker: "Thai & kinesisk restaurang · Sundsvall",
   tagline:
     "Thailändskt och kinesiskt kök. Allt wokas när ni beställer — ät här eller ta med hem.",
+  metaDescription:
+    "Hela menyn för Cherry Woken i Sundsvall – thailändskt och kinesiskt kök som wokas på beställning. Se dagens lunch, priser och rätter, ät här eller hämta.",
   logogram: "紅燈籠",
   searchPlaceholder: "Sök rätt, nummer eller sås",
   legend: "1–3 chili · besökarnas röster på styrkan",
