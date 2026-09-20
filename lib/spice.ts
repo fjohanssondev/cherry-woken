@@ -7,18 +7,22 @@ export type SpiceAggregates = Record<number, SpiceAggregate>;
 export const SPICE_MIN = 1;
 export const SPICE_MAX = 3;
 
-const dishNumbers = (() => {
-  const set = new Set<number>();
+const dishNamesByNo = (() => {
+  const map = new Map<number, string>();
   for (const section of menu) {
     for (const dish of section.dishes) {
-      if (dish.no != null) set.add(dish.no);
+      if (dish.no != null) map.set(dish.no, dish.name);
     }
   }
-  return set;
+  return map;
 })();
 
 export function isVotableDish(no: unknown): no is number {
-  return typeof no === "number" && dishNumbers.has(no);
+  return typeof no === "number" && dishNamesByNo.has(no);
+}
+
+export function dishName(no: number): string | undefined {
+  return dishNamesByNo.get(no);
 }
 
 export function isValidLevel(level: unknown): level is number {
@@ -34,14 +38,8 @@ let client: Redis | null | undefined;
 
 function getRedis(): Redis | null {
   if (client !== undefined) return client;
-  const url =
-    process.env.UPSTASH_STORAGE_KV_REST_API_URL ??
-    process.env.KV_REST_API_URL ??
-    process.env.UPSTASH_REDIS_REST_URL;
-  const token =
-    process.env.UPSTASH_STORAGE_KV_REST_API_TOKEN ??
-    process.env.KV_REST_API_TOKEN ??
-    process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = process.env.UPSTASH_STORAGE_KV_REST_API_URL;
+  const token = process.env.UPSTASH_STORAGE_KV_REST_API_TOKEN;
   client = url && token ? new Redis({ url, token }) : null;
   return client;
 }
@@ -71,7 +69,7 @@ function toNumbers(raw: unknown): number[] {
 export async function readAllSpice(): Promise<SpiceAggregates> {
   const redis = getRedis();
   if (!redis) return {};
-  const numbers = [...dishNumbers];
+  const numbers = [...dishNamesByNo.keys()];
   const pipeline = redis.pipeline();
   for (const no of numbers) pipeline.hvals(key(no));
   const results = (await pipeline.exec()) as unknown[];
@@ -83,13 +81,16 @@ export async function readAllSpice(): Promise<SpiceAggregates> {
   return out;
 }
 
+export type VoteResult = { aggregate: SpiceAggregate; isNew: boolean };
+
 export async function castVote(
   no: number,
   level: number,
   voterId: string
-): Promise<SpiceAggregate> {
+): Promise<VoteResult> {
   const redis = getRedis();
   if (!redis) throw new Error("spice_unavailable");
-  await redis.hset(key(no), { [voterId]: level });
-  return aggregate(toNumbers(await redis.hvals(key(no))));
+  const added = await redis.hset(key(no), { [voterId]: level });
+  const agg = aggregate(toNumbers(await redis.hvals(key(no))));
+  return { aggregate: agg, isNew: added === 1 };
 }

@@ -1,12 +1,48 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 
 import {
   castVote,
+  dishName,
   isValidLevel,
   isVotableDish,
   readAllSpice,
   spiceAvailable,
+  SPICE_MAX,
+  type SpiceAggregate,
 } from "@/lib/spice";
+
+const LEVEL_LABELS: Record<number, string> = {
+  1: "Mild",
+  2: "Medel",
+  3: "Stark",
+};
+
+async function notifyVote(
+  no: number,
+  level: number,
+  aggregate: SpiceAggregate,
+  isNew: boolean
+) {
+  const webhookUrl = process.env.SPICY_WEBHOOK_URL;
+  if (!webhookUrl) return;
+
+  const name = dishName(no) ?? `Rätt ${no}`;
+  const label = LEVEL_LABELS[level] ?? String(level);
+  const avg = aggregate.avg.toFixed(1).replace(".", ",");
+  const votes = `${aggregate.count} ${aggregate.count === 1 ? "röst" : "röster"}`;
+  const kind = isNew ? "Ny styrke-röst" : "Ändrad styrke-röst";
+  const text = `🌶️ ${kind}\n#${no} ${name}: ${label} (${level}/${SPICE_MAX})\nSnitt nu ${avg} · ${votes}`;
+
+  try {
+    await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: text }),
+    });
+  } catch (error) {
+    console.error("[spice] webhook failed", error);
+  }
+}
 
 const VOTER_RE = /^[A-Za-z0-9-]{8,64}$/;
 
@@ -80,6 +116,8 @@ export async function POST(request: Request) {
     );
   }
 
+  const no = data.no;
+  const level = data.level;
   const voterId = typeof data.voterId === "string" ? data.voterId : "";
   if (!VOTER_RE.test(voterId)) {
     return NextResponse.json(
@@ -89,8 +127,9 @@ export async function POST(request: Request) {
   }
 
   try {
-    const aggregate = await castVote(data.no, data.level, voterId);
-    return NextResponse.json({ ok: true, no: data.no, aggregate });
+    const { aggregate, isNew } = await castVote(no, level, voterId);
+    after(() => notifyVote(no, level, aggregate, isNew));
+    return NextResponse.json({ ok: true, no, aggregate });
   } catch {
     return NextResponse.json({ ok: false, error: "failed" }, { status: 500 });
   }
