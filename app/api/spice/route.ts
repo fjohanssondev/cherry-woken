@@ -6,6 +6,7 @@ import {
   isValidLevel,
   isVotableDish,
   readAllSpice,
+  removeVote,
   spiceAvailable,
   SPICE_MAX,
   type SpiceAggregate,
@@ -136,6 +137,57 @@ export async function POST(request: Request) {
   try {
     const { aggregate, isNew } = await castVote(no, level, voterId);
     after(() => notifyVote(no, level, aggregate, isNew));
+    return NextResponse.json({ ok: true, no, aggregate });
+  } catch {
+    return NextResponse.json({ ok: false, error: "failed" }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  if (!spiceAvailable()) {
+    return NextResponse.json(
+      { ok: false, error: "unavailable" },
+      { status: 503 }
+    );
+  }
+
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json(
+      { ok: false, error: "invalid_json" },
+      { status: 400 }
+    );
+  }
+
+  if (isRateLimited(clientIp(request))) {
+    return NextResponse.json(
+      { ok: false, error: "rate_limited" },
+      { status: 429 }
+    );
+  }
+
+  const data = body as { no?: unknown; voterId?: unknown };
+
+  if (!isVotableDish(data.no)) {
+    return NextResponse.json(
+      { ok: false, error: "invalid_dish" },
+      { status: 400 }
+    );
+  }
+
+  const no = data.no;
+  const voterId = typeof data.voterId === "string" ? data.voterId : "";
+  if (!VOTER_RE.test(voterId)) {
+    return NextResponse.json(
+      { ok: false, error: "invalid_voter" },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const aggregate = await removeVote(no, voterId);
     return NextResponse.json({ ok: true, no, aggregate });
   } catch {
     return NextResponse.json({ ok: false, error: "failed" }, { status: 500 });
