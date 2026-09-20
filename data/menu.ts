@@ -30,8 +30,6 @@ export type Dish = {
   description?: string;
   /** Price in Swedish kronor. */
   price: number;
-  /** Marks a hot dish — shown with a chili and matched by the "Starkt" filter. */
-  spicy?: boolean;
   /** Cross-cutting tags used by the category filter. */
   tags?: DishTag[];
 };
@@ -62,7 +60,9 @@ export const site = {
     "Thailändskt och kinesiskt kök. Allt wokas när ni beställer — ät här eller ta med hem.",
   logogram: "紅燈籠",
   searchPlaceholder: "Sök rätt, nummer eller sås",
-  legend: "Chili = stark rätt",
+  legend: "1–3 chili · besökarnas röster på styrkan",
+  legendInfo:
+    "Styrkan på rätterna är helt och hållet besökarnas egna bedömning — rösta själv genom att sätta 1–3 chili på en rätt. Det är alltså inte restaurangens officiella uppgift.",
   hours: {
     label: "Öppettider",
     weekday: "11.00 - 20.00",
@@ -170,7 +170,7 @@ export const menu: MenuSection[] = [
         tags: ["kyckling", "skaldjur"],
       },
       { no: 7, name: "Kyckling m. jordnötssås", price: 110, tags: ["kyckling"] },
-      { no: 8, name: "Szechuen biff (stark)", price: 110, spicy: true, tags: ["biff"] },
+      { no: 8, name: "Szechuen biff (stark)", price: 110, tags: ["biff"] },
       { no: 9, name: "Räkor m. vitlökchili", price: 130, tags: ["skaldjur"] },
       { no: 10, name: "Räkor m. barbecuesås", price: 130, tags: ["skaldjur"] },
       {
@@ -229,7 +229,6 @@ export const menu: MenuSection[] = [
         no: 27,
         name: "Szechuen kyckling (stark)",
         price: 110,
-        spicy: true,
         tags: ["kyckling"],
       },
       {

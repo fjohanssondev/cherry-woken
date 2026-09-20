@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-import { Chili } from "@/components/restaurant/icons";
 
 /* -------------------------------------------------------------------------- */
 /* Section                                                                     */
@@ -93,17 +92,10 @@ function DishLine({ children }: { children: React.ReactNode }) {
   return <div className="flex items-baseline">{children}</div>;
 }
 
-function DishTitle({
-  spicy,
-  children,
-}: {
-  spicy?: boolean;
-  children: React.ReactNode;
-}) {
+function DishTitle({ children }: { children: React.ReactNode }) {
   return (
     <span className="inline-flex items-baseline gap-1.5 font-medium">
       {children}
-      {spicy ? <Chili className="translate-y-0.5" /> : null}
     </span>
   );
 }

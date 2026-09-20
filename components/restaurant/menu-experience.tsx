@@ -26,7 +26,7 @@ export function MenuExperience() {
             </div>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <MenuBrowser.Stats />
-              <MenuBrowser.Legend label={site.legend} />
+              <MenuBrowser.Legend label={site.legend} info={site.legendInfo} />
             </div>
           </div>
         </div>

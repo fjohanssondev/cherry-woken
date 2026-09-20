@@ -3,14 +3,20 @@
 import * as React from "react";
 import { Search as SearchIcon } from "lucide-react";
 
-import type { Category, CategoryId, MenuSection } from "@/data/menu";
+import type { Category, CategoryId, Dish as DishType, MenuSection } from "@/data/menu";
 import { countDishes, filterMenu } from "@/lib/menu";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Chili } from "@/components/restaurant/icons";
+import { InfoTooltip } from "@/components/ui/info-tooltip";
 import { Dish, Section } from "@/components/restaurant/menu";
 import { DishSelector, dishKey } from "@/components/restaurant/selection";
+import {
+  SpiceLegend,
+  SpiceRating,
+  resolveSpiceLevel,
+  useSpiceAggregates,
+} from "@/components/restaurant/spice";
 
 /* -------------------------------------------------------------------------- */
 /* Context                                                                     */
@@ -53,11 +59,15 @@ function MenuBrowser({
 }) {
   const [category, setCategory] = React.useState<CategoryId>("allt");
   const [query, setQuery] = React.useState("");
+  const aggregates = useSpiceAggregates();
 
   const total = React.useMemo(() => countDishes(sections), [sections]);
   const results = React.useMemo(
-    () => filterMenu(sections, category, query),
-    [sections, category, query]
+    () =>
+      filterMenu(sections, category, query, (dish: DishType) =>
+        resolveSpiceLevel(dish, aggregates)
+      ),
+    [sections, category, query, aggregates]
   );
   const visible = React.useMemo(() => countDishes(results), [results]);
 
@@ -163,9 +173,11 @@ function BrowserStats({ className }: { className?: string }) {
 
 function BrowserLegend({
   label,
+  info,
   className,
 }: {
   label: string;
+  info?: string;
   className?: string;
 }) {
   return (
@@ -175,8 +187,9 @@ function BrowserLegend({
         className
       )}
     >
-      <Chili />
+      <SpiceLegend />
       {label}
+      {info ? <InfoTooltip label="Om styrkebetygen" text={info} /> : null}
     </span>
   );
 }
@@ -221,13 +234,14 @@ function BrowserResults({ className }: { className?: string }) {
                 <Dish.Marker>{dish.no}</Dish.Marker>
                 <Dish.Content>
                   <Dish.Line>
-                    <Dish.Title spicy={dish.spicy}>{dish.name}</Dish.Title>
+                    <Dish.Title>{dish.name}</Dish.Title>
                     <Dish.Leader />
                     <Dish.Price>{dish.price}</Dish.Price>
                   </Dish.Line>
                   {dish.description ? (
                     <Dish.Note>{dish.description}</Dish.Note>
                   ) : null}
+                  <SpiceRating dish={dish} />
                 </Dish.Content>
                 <Dish.Action>
                   <DishSelector dish={dish} />
