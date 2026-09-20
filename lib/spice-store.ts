@@ -173,3 +173,49 @@ export async function vote(no: number, level: number) {
     persistVotes();
   }
 }
+
+export async function removeVote(no: number) {
+  ensureLoaded();
+  const previousMine = state.myVotes[no];
+  if (previousMine == null) return;
+  const previousAgg = state.aggregates[no];
+
+  const aggregates = { ...state.aggregates };
+  if (previousAgg && previousAgg.count > 1) {
+    const nextCount = previousAgg.count - 1;
+    aggregates[no] = {
+      count: nextCount,
+      avg: (previousAgg.avg * previousAgg.count - previousMine) / nextCount,
+    };
+  } else {
+    delete aggregates[no];
+  }
+  const myVotes = { ...state.myVotes };
+  delete myVotes[no];
+  commit({ ...state, aggregates, myVotes });
+  persistVotes();
+
+  try {
+    const res = await fetch("/api/spice", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ no, voterId }),
+    });
+    if (!res.ok) throw new Error("failed");
+    const data = await res.json();
+    if (data && data.aggregate) {
+      const next = { ...state.aggregates };
+      const agg = data.aggregate as SpiceAggregate;
+      if (agg.count > 0) next[no] = agg;
+      else delete next[no];
+      commit({ ...state, aggregates: next });
+    }
+  } catch {
+    const rollback = { ...state.aggregates };
+    if (previousAgg) rollback[no] = previousAgg;
+    else delete rollback[no];
+    const myVotesRollback = { ...state.myVotes, [no]: previousMine };
+    commit({ ...state, aggregates: rollback, myVotes: myVotesRollback });
+    persistVotes();
+  }
+}

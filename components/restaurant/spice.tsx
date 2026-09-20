@@ -6,6 +6,7 @@ import type { Dish } from "@/data/menu";
 import {
   getServerSnapshot,
   getSnapshot,
+  removeVote,
   subscribe,
   vote,
   type SpiceAggregates,
@@ -113,11 +114,15 @@ export function SpiceRating({ dish }: { dish: Dish }) {
                 key={level}
                 type="button"
                 onClick={() => {
-                  void vote(no, level);
+                  void (active ? removeVote(no) : vote(no, level));
                   setOpen(false);
                 }}
                 aria-pressed={active}
-                aria-label={`${LEVEL_LABELS[level]} — ${level} av 3`}
+                aria-label={
+                  active
+                    ? `Ta bort din röst: ${LEVEL_LABELS[level]}`
+                    : `${LEVEL_LABELS[level]} — ${level} av 3`
+                }
                 className={cn(
                   "inline-flex items-center gap-1 rounded-full border px-2 py-1 text-xs transition-colors",
                   active
@@ -130,6 +135,11 @@ export function SpiceRating({ dish }: { dish: Dish }) {
               </button>
             );
           })}
+          {mine != null ? (
+            <span className="w-full text-xs text-muted-foreground sm:w-auto">
+              Klicka på din nivå igen för att ta bort rösten
+            </span>
+          ) : null}
         </div>
       ) : null}
     </div>

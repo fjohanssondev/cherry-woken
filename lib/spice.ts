@@ -94,3 +94,13 @@ export async function castVote(
   const agg = aggregate(toNumbers(await redis.hvals(key(no))));
   return { aggregate: agg, isNew: added === 1 };
 }
+
+export async function removeVote(
+  no: number,
+  voterId: string
+): Promise<SpiceAggregate> {
+  const redis = getRedis();
+  if (!redis) throw new Error("spice_unavailable");
+  await redis.hdel(key(no), voterId);
+  return aggregate(toNumbers(await redis.hvals(key(no))));
+}
