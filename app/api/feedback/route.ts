@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 /**
  * Receives feedback from the dialog. It works out of the box by logging to the
  * server, and — if you set the FEEDBACK_WEBHOOK_URL env var — it also forwards
- * each message to a Discord or Slack incoming webhook (auto-detected).
+ * each message to a Discord incoming webhook.
  *
  * Spam protection: a honeypot field, a minimum length, and a best-effort
  * per-IP rate limit.
@@ -100,21 +100,18 @@ export async function POST(request: Request) {
   // Always keep a server-side record in the logs.
   console.log("[feedback]", entry);
 
-  // Optional: forward to a Discord or Slack webhook if one is configured.
+  // Optional: forward to a Discord webhook if one is configured.
   const webhookUrl = process.env.FEEDBACK_WEBHOOK_URL;
   if (webhookUrl) {
     const text =
       `📝 Feedback\n${message}` +
       (entry.email ? `\n✉️ Svara till: ${entry.email}` : "") +
       (entry.path ? `\n(sida: ${entry.path})` : "");
-    // Slack incoming webhooks want { text }; Discord wants { content }.
-    const isSlack = webhookUrl.includes("hooks.slack.com");
-    const payload = isSlack ? { text } : { content: text };
     try {
       await fetch(webhookUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ content: text }),
       });
     } catch (error) {
       // Don't fail the user's request if the webhook is momentarily down.

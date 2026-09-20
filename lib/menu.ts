@@ -1,9 +1,15 @@
 import type { CategoryId, Dish, MenuSection } from "@/data/menu";
 
+export type SpiceLevelResolver = (dish: Dish) => number;
+
 /** Does a dish belong to the given filter category? */
-export function dishMatchesCategory(dish: Dish, category: CategoryId): boolean {
+export function dishMatchesCategory(
+  dish: Dish,
+  category: CategoryId,
+  spiceLevel: SpiceLevelResolver
+): boolean {
   if (category === "allt") return true;
-  if (category === "starkt") return Boolean(dish.spicy);
+  if (category === "starkt") return spiceLevel(dish) >= 2;
   return dish.tags?.includes(category) ?? false;
 }
 
@@ -26,14 +32,16 @@ export function countDishes(sections: MenuSection[]): number {
 export function filterMenu(
   sections: MenuSection[],
   category: CategoryId,
-  query: string
+  query: string,
+  spiceLevel: SpiceLevelResolver
 ): MenuSection[] {
   return sections
     .map((section) => ({
       ...section,
       dishes: section.dishes.filter(
         (dish) =>
-          dishMatchesCategory(dish, category) && dishMatchesQuery(dish, query)
+          dishMatchesCategory(dish, category, spiceLevel) &&
+          dishMatchesQuery(dish, query)
       ),
     }))
     .filter((section) => section.dishes.length > 0);

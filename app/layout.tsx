@@ -21,7 +21,7 @@ const title = `${site.name} · ${site.kicker}`;
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title,
-  description: site.tagline,
+  description: site.metaDescription,
   applicationName: site.name,
   keywords: [
     "Cherry Woken",
@@ -50,12 +50,12 @@ export const metadata: Metadata = {
     url: siteUrl,
     siteName: site.name,
     title,
-    description: site.tagline,
+    description: site.metaDescription,
   },
   twitter: {
     card: "summary_large_image",
     title,
-    description: site.tagline,
+    description: site.metaDescription,
   },
 };
 

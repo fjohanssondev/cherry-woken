@@ -3,6 +3,7 @@
 import { categories, menu, site } from "@/data/menu";
 import { MenuBrowser } from "@/components/restaurant/menu-browser";
 import { ReviewCallout } from "@/components/restaurant/review-callout";
+import { SpiceNotice } from "@/components/restaurant/spice";
 
 /**
  * The interactive part of the page: search, category filters, the filtered
@@ -26,7 +27,10 @@ export function MenuExperience() {
             </div>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <MenuBrowser.Stats />
-              <MenuBrowser.Legend label={site.legend} />
+              <div className="flex flex-col items-start gap-1 sm:items-end">
+                <MenuBrowser.Legend label={site.legend} info={site.legendInfo} />
+                <SpiceNotice />
+              </div>
             </div>
           </div>
         </div>
