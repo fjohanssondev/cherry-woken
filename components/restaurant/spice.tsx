@@ -33,6 +33,16 @@ export function useSpiceAggregates(): SpiceAggregates {
   return useSpiceState().aggregates;
 }
 
+export function SpiceNotice() {
+  const { error } = useSpiceState();
+  if (!error) return null;
+  return (
+    <span className="text-sm text-muted-foreground">
+      Röster kan inte hämtas just nu
+    </span>
+  );
+}
+
 export function resolveSpiceLevel(
   dish: Dish,
   aggregates: SpiceAggregates

@@ -5,6 +5,7 @@ export type SpiceVotes = Record<number, number>;
 export type SpiceState = {
   aggregates: SpiceAggregates;
   myVotes: SpiceVotes;
+  error: boolean;
 };
 
 const VOTER_KEY = "cherry-woken:voter";
@@ -13,9 +14,10 @@ const VOTES_KEY = "cherry-woken:spice-votes";
 const SERVER_STATE: SpiceState = Object.freeze({
   aggregates: {},
   myVotes: {},
+  error: false,
 }) as SpiceState;
 
-let state: SpiceState = { aggregates: {}, myVotes: {} };
+let state: SpiceState = { aggregates: {}, myVotes: {}, error: false };
 let voterId = "";
 let loaded = false;
 let fetched = false;
@@ -76,13 +78,22 @@ async function loadAggregates() {
   fetched = true;
   try {
     const res = await fetch("/api/spice", { cache: "no-store" });
-    if (!res.ok) return;
+    if (!res.ok) {
+      fetched = false;
+      commit({ ...state, error: true });
+      return;
+    }
     const data = await res.json();
     if (data && data.aggregates && typeof data.aggregates === "object") {
-      commit({ ...state, aggregates: data.aggregates as SpiceAggregates });
+      commit({
+        ...state,
+        aggregates: data.aggregates as SpiceAggregates,
+        error: false,
+      });
     }
   } catch {
     fetched = false;
+    commit({ ...state, error: true });
   }
 }
 
@@ -125,6 +136,7 @@ export async function vote(no: number, level: number) {
   const previousMine = state.myVotes[no];
 
   commit({
+    ...state,
     aggregates: {
       ...state.aggregates,
       [no]: optimistic(previousAgg, previousMine, level),
@@ -157,7 +169,7 @@ export async function vote(no: number, level: number) {
     const myVotes = { ...state.myVotes };
     if (previousMine != null) myVotes[no] = previousMine;
     else delete myVotes[no];
-    commit({ aggregates, myVotes });
+    commit({ ...state, aggregates, myVotes });
     persistVotes();
   }
 }

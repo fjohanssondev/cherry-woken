@@ -72,8 +72,15 @@ function clientIp(request: Request): string {
 }
 
 export async function GET() {
-  const aggregates = await readAllSpice();
-  return NextResponse.json({ ok: true, aggregates });
+  try {
+    const aggregates = await readAllSpice();
+    return NextResponse.json({ ok: true, aggregates });
+  } catch {
+    return NextResponse.json(
+      { ok: false, error: "unavailable", aggregates: {} },
+      { status: 503 }
+    );
+  }
 }
 
 export async function POST(request: Request) {
