@@ -46,10 +46,17 @@ export default function Home() {
                 },
                 {
                   label: site.lunch.label,
-                  lines: [site.lunch.hours, site.lunch.included],
+                  note: site.lunch.note,
+                  lines: [
+                    {
+                      day: site.lunch.hours.day,
+                      time: site.lunch.hours.time,
+                    },
+                  ],
                 },
                 {
                   label: site.order.label,
+                  tight: true,
                   lines: [
                     {
                       text: site.order.phone,
