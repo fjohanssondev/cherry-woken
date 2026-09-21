@@ -67,17 +67,17 @@ export const site = {
     "Styrkan på rätterna är helt och hållet besökarnas egna bedömning — rösta själv genom att sätta 1–3 chili på en rätt. Det är alltså inte restaurangens officiella uppgift.",
   hours: {
     label: "Öppettider",
-    weekday: "11.00 - 20.00",
-    weekend: "12.00 - 20.00",
+    weekday: { day: "Tis – fre", time: "11.00 - 20.00" },
+    weekend: { day: "Lör – sön", time: "12.00 - 20.00" },
   },
   lunch: {
     label: "Dagens lunch",
-    hours: "Mån–fre 11–14",
-    included: "Dryck ingår",
+    note: "dryck ingår",
+    hours: { day: "Tis – fre", time: "11.00 - 14.00" },
   },
   order: {
     label: "Beställ & hämta",
-    phone: "070 - 740 47 52",
+    phone: "060 - 740 47 52",
     address: "Norrmalmsgatan 4, 852 34 Sundsvall",
   },
   allergyNote:
@@ -93,7 +93,7 @@ export const site = {
   },
   find: {
     label: "Hitta hit",
-    phone: "070 - 740 47 52",
+    phone: "060 - 740 47 52",
     address: "Norrmalmsgatan 4",
     postal: "852 34",
     city: "Sundsvall",

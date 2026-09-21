@@ -42,12 +42,20 @@ function HeaderLantern() {
   );
 }
 
-type InfoLine = string | { text: string; href: string };
+type InfoLine =
+  | string
+  | { text: string; href: string }
+  | { day: string; time: string };
 
 function Info({
   groups,
 }: {
-  groups: { label: string; lines: InfoLine[] }[];
+  groups: {
+    label: string;
+    note?: string;
+    lines: InfoLine[];
+    tight?: boolean;
+  }[];
 }) {
   return (
     <div className="w-full max-w-xs rounded-lg border border-border bg-card p-5">
@@ -58,14 +66,34 @@ function Info({
         >
           <p className="text-[0.7rem] font-medium tracking-[0.15em] text-muted-foreground uppercase">
             {group.label}
+            {group.note && (
+              <span className="ml-1.5 font-normal tracking-normal text-foreground/70 normal-case">
+                ({group.note})
+              </span>
+            )}
           </p>
-          <div className="mt-2 space-y-1">
-            {group.lines.map((line) =>
-              typeof line === "string" ? (
-                <p key={line} className="text-sm">
-                  {line}
-                </p>
-              ) : (
+          <div className={cn("mt-2", group.tight ? "space-y-1.5" : "space-y-2.5")}>
+            {group.lines.map((line) => {
+              if (typeof line === "string") {
+                return (
+                  <p key={line} className="text-sm">
+                    {line}
+                  </p>
+                );
+              }
+
+              if ("day" in line) {
+                return (
+                  <div key={line.day}>
+                    <p className="text-xs text-foreground">{line.day}</p>
+                    <p className="text-base font-medium text-price">
+                      {line.time}
+                    </p>
+                  </div>
+                );
+              }
+
+              return (
                 <a
                   key={line.text}
                   href={line.href}
@@ -73,8 +101,8 @@ function Info({
                 >
                   {line.text}
                 </a>
-              )
-            )}
+              );
+            })}
           </div>
         </div>
       ))}
