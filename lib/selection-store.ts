@@ -5,14 +5,51 @@
  * survives a reload. Read it from components with `useSyncExternalStore`.
  */
 
+import { menu } from "@/data/menu";
+
 export type SelectionItems = Record<string, number>;
 
 const STORAGE_KEY = "cherry-woken:selection";
 const EMPTY: SelectionItems = Object.freeze({});
 
+const ID_SET = new Set<string>();
+const LEGACY_TO_ID = new Map<string, string>();
+for (const section of menu) {
+  for (const dish of section.dishes) {
+    ID_SET.add(dish.id);
+    const legacy = dish.no != null ? `n${dish.no}` : `x:${dish.name}`;
+    LEGACY_TO_ID.set(legacy, dish.id);
+  }
+}
+
 let items: SelectionItems = {};
 let loaded = false;
 const listeners = new Set<() => void>();
+
+function migrate(parsed: Record<string, unknown>): {
+  items: SelectionItems;
+  changed: boolean;
+} {
+  const next: SelectionItems = {};
+  let changed = false;
+  for (const [key, value] of Object.entries(parsed)) {
+    const qty = typeof value === "number" ? value : 0;
+    if (qty <= 0) {
+      changed = true;
+      continue;
+    }
+    if (ID_SET.has(key)) {
+      next[key] = (next[key] ?? 0) + qty;
+      continue;
+    }
+    const id = LEGACY_TO_ID.get(key);
+    if (id) {
+      next[id] = (next[id] ?? 0) + qty;
+    }
+    changed = true;
+  }
+  return { items: next, changed };
+}
 
 function ensureLoaded() {
   if (loaded) return;
@@ -22,7 +59,9 @@ function ensureLoaded() {
     if (raw) {
       const parsed = JSON.parse(raw);
       if (parsed && typeof parsed === "object") {
-        items = parsed as SelectionItems;
+        const migrated = migrate(parsed as Record<string, unknown>);
+        items = migrated.items;
+        if (migrated.changed) persist();
       }
     }
   } catch {

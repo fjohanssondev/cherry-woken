@@ -15,9 +15,8 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-/** Stable key for a dish (numbered dishes by number, extras by name). */
 export function dishKey(dish: Dish) {
-  return dish.no != null ? `n${dish.no}` : `x:${dish.name}`;
+  return dish.id;
 }
 
 const DISH_BY_KEY = new Map<string, Dish>();
