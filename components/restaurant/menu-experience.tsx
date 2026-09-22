@@ -1,6 +1,7 @@
 "use client";
 
 import { categories, menu, site } from "@/data/menu";
+import { ListTip } from "@/components/restaurant/list-hint";
 import { MenuBrowser } from "@/components/restaurant/menu-browser";
 import { ReviewCallout } from "@/components/restaurant/review-callout";
 import { SpiceNotice } from "@/components/restaurant/spice";
@@ -37,6 +38,7 @@ export function MenuExperience() {
 
         {/* Menu + review */}
         <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-12">
+          <ListTip />
           <MenuBrowser.Results />
 
           <p className="mt-12 text-xs text-muted-foreground italic">

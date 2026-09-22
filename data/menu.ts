@@ -81,6 +81,11 @@ export const site = {
     phone: "060 - 740 47 52",
     address: "Norrmalmsgatan 4, 852 34 Sundsvall",
   },
+  listTip: {
+    title: "Spara dina favoriter",
+    body: "Tryck på + vid en rätt för att lägga den i din lista. Dela sedan listan med vänner eller familj – så minns ni lätt vad ni åt förra gången.",
+    dismiss: "Stäng",
+  },
   allergyNote:
     "Fråga gärna om allergier innan ni beställer — i Cherry Wokens kök finns jordnötter, ägg, soja, skaldjur och gluten.",
   review: {
