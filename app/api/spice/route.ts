@@ -3,6 +3,7 @@ import { after, NextResponse } from "next/server";
 import {
   castVote,
   dishName,
+  dishNumber,
   isValidLevel,
   isVotableDish,
   readAllSpice,
@@ -19,7 +20,7 @@ const LEVEL_LABELS: Record<number, string> = {
 };
 
 async function notifyVote(
-  no: number,
+  id: string,
   level: number,
   aggregate: SpiceAggregate,
   isNew: boolean
@@ -27,12 +28,14 @@ async function notifyVote(
   const webhookUrl = process.env.SPICY_WEBHOOK_URL;
   if (!webhookUrl) return;
 
-  const name = dishName(no) ?? `Rätt ${no}`;
+  const no = dishNumber(id);
+  const name = dishName(id) ?? `Rätt ${no ?? id}`;
   const label = LEVEL_LABELS[level] ?? String(level);
   const avg = aggregate.avg.toFixed(1).replace(".", ",");
   const votes = `${aggregate.count} ${aggregate.count === 1 ? "röst" : "röster"}`;
   const kind = isNew ? "Ny styrke-röst" : "Ändrad styrke-röst";
-  const text = `🌶️ ${kind}\n#${no} ${name}: ${label} (${level}/${SPICE_MAX})\nSnitt nu ${avg} · ${votes}`;
+  const marker = no != null ? `#${no} ` : "";
+  const text = `🌶️ ${kind}\n${marker}${name}: ${label} (${level}/${SPICE_MAX})\nSnitt nu ${avg} · ${votes}`;
 
   try {
     await fetch(webhookUrl, {
@@ -109,9 +112,9 @@ export async function POST(request: Request) {
     );
   }
 
-  const data = body as { no?: unknown; level?: unknown; voterId?: unknown };
+  const data = body as { id?: unknown; level?: unknown; voterId?: unknown };
 
-  if (!isVotableDish(data.no)) {
+  if (!isVotableDish(data.id)) {
     return NextResponse.json(
       { ok: false, error: "invalid_dish" },
       { status: 400 }
@@ -124,7 +127,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const no = data.no;
+  const id = data.id;
   const level = data.level;
   const voterId = typeof data.voterId === "string" ? data.voterId : "";
   if (!VOTER_RE.test(voterId)) {
@@ -135,9 +138,9 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { aggregate, isNew } = await castVote(no, level, voterId);
-    after(() => notifyVote(no, level, aggregate, isNew));
-    return NextResponse.json({ ok: true, no, aggregate });
+    const { aggregate, isNew } = await castVote(id, level, voterId);
+    after(() => notifyVote(id, level, aggregate, isNew));
+    return NextResponse.json({ ok: true, id, aggregate });
   } catch {
     return NextResponse.json({ ok: false, error: "failed" }, { status: 500 });
   }
@@ -168,16 +171,16 @@ export async function DELETE(request: Request) {
     );
   }
 
-  const data = body as { no?: unknown; voterId?: unknown };
+  const data = body as { id?: unknown; voterId?: unknown };
 
-  if (!isVotableDish(data.no)) {
+  if (!isVotableDish(data.id)) {
     return NextResponse.json(
       { ok: false, error: "invalid_dish" },
       { status: 400 }
     );
   }
 
-  const no = data.no;
+  const id = data.id;
   const voterId = typeof data.voterId === "string" ? data.voterId : "";
   if (!VOTER_RE.test(voterId)) {
     return NextResponse.json(
@@ -187,8 +190,8 @@ export async function DELETE(request: Request) {
   }
 
   try {
-    const aggregate = await removeVote(no, voterId);
-    return NextResponse.json({ ok: true, no, aggregate });
+    const aggregate = await removeVote(id, voterId);
+    return NextResponse.json({ ok: true, id, aggregate });
   } catch {
     return NextResponse.json({ ok: false, error: "failed" }, { status: 500 });
   }
