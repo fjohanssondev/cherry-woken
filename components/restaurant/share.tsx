@@ -3,7 +3,6 @@
 import * as React from "react";
 import { Check, Share2 } from "lucide-react";
 
-import { menu, type Dish } from "@/data/menu";
 import {
   getSnapshot,
   mergeSelection,
@@ -12,6 +11,7 @@ import {
   serializeSelection,
   type SelectionItems,
 } from "@/lib/selection-store";
+import { resolveSelection } from "@/lib/selection-resolve";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -22,33 +22,17 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-const DISH_BY_ID = new Map<string, Dish>();
-for (const section of menu) {
-  for (const dish of section.dishes) DISH_BY_ID.set(dish.id, dish);
-}
-
-type ResolvedEntry = { dish: Dish; quantity: number };
-
-function resolve(items: SelectionItems) {
-  const entries: ResolvedEntry[] = Object.entries(items)
-    .map(([id, quantity]) => ({ dish: DISH_BY_ID.get(id), quantity }))
-    .filter(
-      (entry): entry is ResolvedEntry =>
-        Boolean(entry.dish) && entry.quantity > 0
-    );
-  const count = entries.reduce((sum, entry) => sum + entry.quantity, 0);
-  const total = entries.reduce(
-    (sum, entry) => sum + entry.dish.price * entry.quantity,
-    0
-  );
-  return { entries, count, total };
-}
-
-export function ShareListButton() {
+export function ShareButton({
+  getItems,
+  label = "Dela",
+}: {
+  getItems: () => SelectionItems;
+  label?: string;
+}) {
   const [copied, setCopied] = React.useState(false);
 
   async function share() {
-    const encoded = serializeSelection(getSnapshot());
+    const encoded = serializeSelection(getItems());
     if (!encoded) return;
     const url = `${window.location.origin}/?lista=${encoded}`;
 
@@ -73,9 +57,13 @@ export function ShareListButton() {
   return (
     <Button variant="ghost" size="sm" onClick={share}>
       {copied ? <Check className="size-4" /> : <Share2 className="size-4" />}
-      {copied ? "Kopierad" : "Dela"}
+      {copied ? "Kopierad" : label}
     </Button>
   );
+}
+
+export function ShareListButton() {
+  return <ShareButton getItems={getSnapshot} />;
 }
 
 export function SharedListPrompt() {
@@ -98,8 +86,8 @@ export function SharedListPrompt() {
 
   if (!incoming) return null;
 
-  const { entries, count, total } = resolve(incoming);
-  const hasCurrent = resolve(getSnapshot()).count > 0;
+  const { entries, count, total } = resolveSelection(incoming);
+  const hasCurrent = resolveSelection(getSnapshot()).count > 0;
 
   function close() {
     setIncoming(null);

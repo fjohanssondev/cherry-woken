@@ -15,6 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ShareListButton } from "@/components/restaurant/share";
+import { SaveListButton } from "@/components/restaurant/saved-lists";
 
 export function dishKey(dish: Dish) {
   return dish.id;
@@ -167,6 +168,7 @@ export function OrderSummary() {
               </span>
             </button>
             <div className="flex items-center gap-1">
+              <SaveListButton />
               <ShareListButton />
               <Button variant="ghost" size="sm" onClick={clearSelection}>
                 <Trash2 className="size-4" />
