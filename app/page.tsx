@@ -3,6 +3,7 @@ import { siteUrl } from "@/lib/site";
 import { telHref } from "@/lib/utils";
 import { MenuExperience } from "@/components/restaurant/menu-experience";
 import { OrderSummary } from "@/components/restaurant/selection";
+import { SharedListPrompt } from "@/components/restaurant/share";
 import { SiteFooter } from "@/components/restaurant/site-footer";
 import { SiteHeader } from "@/components/restaurant/site-header";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -79,6 +80,7 @@ export default function Home() {
       {/* Sticky pick-list bar; rendered last so its spacer reserves room below
           the footer instead of covering it. */}
       <OrderSummary />
+      <SharedListPrompt />
     </div>
   );
 }

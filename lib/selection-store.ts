@@ -124,3 +124,46 @@ export function clearSelection() {
   persist();
   emit();
 }
+
+const MAX_QTY = 99;
+const MAX_TOKENS = 100;
+
+export function serializeSelection(source: SelectionItems): string {
+  return Object.entries(source)
+    .filter(([id, qty]) => ID_SET.has(id) && qty > 0)
+    .map(([id, qty]) =>
+      qty === 1 ? id : `${id}x${Math.min(qty, MAX_QTY)}`
+    )
+    .join(",");
+}
+
+export function parseSelection(param: string): SelectionItems {
+  const next: SelectionItems = {};
+  for (const token of param.split(",").slice(0, MAX_TOKENS)) {
+    const match = token.match(/^([a-z0-9]+?)(?:x(\d+))?$/);
+    if (!match) continue;
+    const id = match[1];
+    if (!ID_SET.has(id)) continue;
+    const qty = match[2] ? Math.min(parseInt(match[2], 10), MAX_QTY) : 1;
+    if (qty > 0) next[id] = qty;
+  }
+  return next;
+}
+
+export function replaceSelection(next: SelectionItems) {
+  ensureLoaded();
+  items = { ...next };
+  persist();
+  emit();
+}
+
+export function mergeSelection(extra: SelectionItems) {
+  ensureLoaded();
+  const next = { ...items };
+  for (const [id, qty] of Object.entries(extra)) {
+    if (qty > 0) next[id] = Math.min((next[id] ?? 0) + qty, MAX_QTY);
+  }
+  items = next;
+  persist();
+  emit();
+}

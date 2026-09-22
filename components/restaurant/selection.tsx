@@ -14,6 +14,7 @@ import {
 } from "@/lib/selection-store";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { ShareListButton } from "@/components/restaurant/share";
 
 export function dishKey(dish: Dish) {
   return dish.id;
@@ -165,10 +166,13 @@ export function OrderSummary() {
                 {total}&nbsp;kr
               </span>
             </button>
-            <Button variant="ghost" size="sm" onClick={clearSelection}>
-              <Trash2 className="size-4" />
-              Rensa
-            </Button>
+            <div className="flex items-center gap-1">
+              <ShareListButton />
+              <Button variant="ghost" size="sm" onClick={clearSelection}>
+                <Trash2 className="size-4" />
+                Rensa
+              </Button>
+            </div>
           </div>
 
           <p className={cn("pb-3 text-xs text-muted-foreground", open && "hidden")}>
