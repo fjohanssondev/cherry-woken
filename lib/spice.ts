@@ -1,28 +1,32 @@
 import { Redis } from "@upstash/redis";
-import { menu } from "@/data/menu";
+import { menu, type Dish } from "@/data/menu";
 
 export type SpiceAggregate = { count: number; avg: number };
-export type SpiceAggregates = Record<number, SpiceAggregate>;
+export type SpiceAggregates = Record<string, SpiceAggregate>;
 
 export const SPICE_MIN = 1;
 export const SPICE_MAX = 3;
 
-const dishNamesByNo = (() => {
-  const map = new Map<number, string>();
+const votableDishes = (() => {
+  const map = new Map<string, Dish>();
   for (const section of menu) {
     for (const dish of section.dishes) {
-      if (dish.no != null) map.set(dish.no, dish.name);
+      if (dish.no != null) map.set(dish.id, dish);
     }
   }
   return map;
 })();
 
-export function isVotableDish(no: unknown): no is number {
-  return typeof no === "number" && dishNamesByNo.has(no);
+export function isVotableDish(id: unknown): id is string {
+  return typeof id === "string" && votableDishes.has(id);
 }
 
-export function dishName(no: number): string | undefined {
-  return dishNamesByNo.get(no);
+export function dishName(id: string): string | undefined {
+  return votableDishes.get(id)?.name;
+}
+
+export function dishNumber(id: string): number | undefined {
+  return votableDishes.get(id)?.no;
 }
 
 export function isValidLevel(level: unknown): level is number {
@@ -48,8 +52,8 @@ export function spiceAvailable(): boolean {
   return getRedis() !== null;
 }
 
-function key(no: number): string {
-  return `spice:${no}`;
+function key(id: string): string {
+  return `spice:${id}`;
 }
 
 function aggregate(values: number[]): SpiceAggregate {
@@ -69,14 +73,14 @@ function toNumbers(raw: unknown): number[] {
 export async function readAllSpice(): Promise<SpiceAggregates> {
   const redis = getRedis();
   if (!redis) return {};
-  const numbers = [...dishNamesByNo.keys()];
+  const ids = [...votableDishes.keys()];
   const pipeline = redis.pipeline();
-  for (const no of numbers) pipeline.hvals(key(no));
+  for (const id of ids) pipeline.hvals(key(id));
   const results = (await pipeline.exec()) as unknown[];
   const out: SpiceAggregates = {};
-  numbers.forEach((no, index) => {
+  ids.forEach((id, index) => {
     const agg = aggregate(toNumbers(results[index]));
-    if (agg.count > 0) out[no] = agg;
+    if (agg.count > 0) out[id] = agg;
   });
   return out;
 }
@@ -84,23 +88,23 @@ export async function readAllSpice(): Promise<SpiceAggregates> {
 export type VoteResult = { aggregate: SpiceAggregate; isNew: boolean };
 
 export async function castVote(
-  no: number,
+  id: string,
   level: number,
   voterId: string
 ): Promise<VoteResult> {
   const redis = getRedis();
   if (!redis) throw new Error("spice_unavailable");
-  const added = await redis.hset(key(no), { [voterId]: level });
-  const agg = aggregate(toNumbers(await redis.hvals(key(no))));
+  const added = await redis.hset(key(id), { [voterId]: level });
+  const agg = aggregate(toNumbers(await redis.hvals(key(id))));
   return { aggregate: agg, isNew: added === 1 };
 }
 
 export async function removeVote(
-  no: number,
+  id: string,
   voterId: string
 ): Promise<SpiceAggregate> {
   const redis = getRedis();
   if (!redis) throw new Error("spice_unavailable");
-  await redis.hdel(key(no), voterId);
-  return aggregate(toNumbers(await redis.hvals(key(no))));
+  await redis.hdel(key(id), voterId);
+  return aggregate(toNumbers(await redis.hvals(key(id))));
 }

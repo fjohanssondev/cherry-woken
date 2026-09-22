@@ -49,7 +49,7 @@ export function resolveSpiceLevel(
   aggregates: SpiceAggregates
 ): number {
   if (dish.no == null) return 0;
-  const agg = aggregates[dish.no];
+  const agg = aggregates[dish.id];
   if (agg && agg.count > 0) return Math.round(agg.avg);
   return 0;
 }
@@ -79,11 +79,11 @@ export function SpiceRating({ dish }: { dish: Dish }) {
 
   if (dish.no == null) return null;
 
-  const no = dish.no;
-  const agg = aggregates[no];
+  const id = dish.id;
+  const agg = aggregates[id];
   const count = agg?.count ?? 0;
   const rounded = count > 0 ? Math.round(agg.avg) : 0;
-  const mine = myVotes[no];
+  const mine = myVotes[id];
 
   const countLabel =
     count === 0 ? "Rösta på styrkan" : count === 1 ? "1 röst" : `${count} röster`;
@@ -114,7 +114,7 @@ export function SpiceRating({ dish }: { dish: Dish }) {
                 key={level}
                 type="button"
                 onClick={() => {
-                  void (active ? removeVote(no) : vote(no, level));
+                  void (active ? removeVote(id) : vote(id, level));
                   setOpen(false);
                 }}
                 aria-pressed={active}

@@ -1,7 +1,9 @@
 "use client";
 
 import { categories, menu, site } from "@/data/menu";
+import { ListTip } from "@/components/restaurant/list-hint";
 import { MenuBrowser } from "@/components/restaurant/menu-browser";
+import { SavedListsButton } from "@/components/restaurant/saved-lists";
 import { ReviewCallout } from "@/components/restaurant/review-callout";
 import { SpiceNotice } from "@/components/restaurant/spice";
 
@@ -26,7 +28,10 @@ export function MenuExperience() {
               <MenuBrowser.Filters />
             </div>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <MenuBrowser.Stats />
+              <div className="flex items-center gap-3">
+                <MenuBrowser.Stats />
+                <SavedListsButton />
+              </div>
               <div className="flex flex-col items-start gap-1 sm:items-end">
                 <MenuBrowser.Legend label={site.legend} info={site.legendInfo} />
                 <SpiceNotice />
@@ -37,6 +42,7 @@ export function MenuExperience() {
 
         {/* Menu + review */}
         <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-12">
+          <ListTip />
           <MenuBrowser.Results />
 
           <p className="mt-12 text-xs text-muted-foreground italic">

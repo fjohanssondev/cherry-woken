@@ -1,6 +1,8 @@
+import { menu } from "@/data/menu";
+
 export type SpiceAggregate = { count: number; avg: number };
-export type SpiceAggregates = Record<number, SpiceAggregate>;
-export type SpiceVotes = Record<number, number>;
+export type SpiceAggregates = Record<string, SpiceAggregate>;
+export type SpiceVotes = Record<string, number>;
 
 export type SpiceState = {
   aggregates: SpiceAggregates;
@@ -10,6 +12,31 @@ export type SpiceState = {
 
 const VOTER_KEY = "cherry-woken:voter";
 const VOTES_KEY = "cherry-woken:spice-votes";
+
+const VOTABLE_IDS = new Set<string>();
+const NUMBER_TO_ID = new Map<string, string>();
+for (const section of menu) {
+  for (const dish of section.dishes) {
+    if (dish.no != null) {
+      VOTABLE_IDS.add(dish.id);
+      NUMBER_TO_ID.set(String(dish.no), dish.id);
+    }
+  }
+}
+
+function migrateVotes(parsed: Record<string, unknown>): SpiceVotes {
+  const next: SpiceVotes = {};
+  for (const [key, value] of Object.entries(parsed)) {
+    if (typeof value !== "number") continue;
+    if (VOTABLE_IDS.has(key)) {
+      next[key] = value;
+      continue;
+    }
+    const id = NUMBER_TO_ID.get(key);
+    if (id) next[id] = value;
+  }
+  return next;
+}
 
 const SERVER_STATE: SpiceState = Object.freeze({
   aggregates: {},
@@ -52,7 +79,9 @@ function ensureLoaded() {
     if (raw) {
       const parsed = JSON.parse(raw);
       if (parsed && typeof parsed === "object") {
-        state = { ...state, myVotes: parsed as SpiceVotes };
+        const migrated = migrateVotes(parsed as Record<string, unknown>);
+        state = { ...state, myVotes: migrated };
+        if (JSON.stringify(migrated) !== raw) persistVotes();
       }
     }
   } catch {
@@ -130,18 +159,18 @@ export function getServerSnapshot(): SpiceState {
   return SERVER_STATE;
 }
 
-export async function vote(no: number, level: number) {
+export async function vote(id: string, level: number) {
   ensureLoaded();
-  const previousAgg = state.aggregates[no];
-  const previousMine = state.myVotes[no];
+  const previousAgg = state.aggregates[id];
+  const previousMine = state.myVotes[id];
 
   commit({
     ...state,
     aggregates: {
       ...state.aggregates,
-      [no]: optimistic(previousAgg, previousMine, level),
+      [id]: optimistic(previousAgg, previousMine, level),
     },
-    myVotes: { ...state.myVotes, [no]: level },
+    myVotes: { ...state.myVotes, [id]: level },
   });
   persistVotes();
 
@@ -149,7 +178,7 @@ export async function vote(no: number, level: number) {
     const res = await fetch("/api/spice", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ no, level, voterId }),
+      body: JSON.stringify({ id, level, voterId }),
     });
     if (!res.ok) throw new Error("failed");
     const data = await res.json();
@@ -158,40 +187,40 @@ export async function vote(no: number, level: number) {
         ...state,
         aggregates: {
           ...state.aggregates,
-          [no]: data.aggregate as SpiceAggregate,
+          [id]: data.aggregate as SpiceAggregate,
         },
       });
     }
   } catch {
     const aggregates = { ...state.aggregates };
-    if (previousAgg) aggregates[no] = previousAgg;
-    else delete aggregates[no];
+    if (previousAgg) aggregates[id] = previousAgg;
+    else delete aggregates[id];
     const myVotes = { ...state.myVotes };
-    if (previousMine != null) myVotes[no] = previousMine;
-    else delete myVotes[no];
+    if (previousMine != null) myVotes[id] = previousMine;
+    else delete myVotes[id];
     commit({ ...state, aggregates, myVotes });
     persistVotes();
   }
 }
 
-export async function removeVote(no: number) {
+export async function removeVote(id: string) {
   ensureLoaded();
-  const previousMine = state.myVotes[no];
+  const previousMine = state.myVotes[id];
   if (previousMine == null) return;
-  const previousAgg = state.aggregates[no];
+  const previousAgg = state.aggregates[id];
 
   const aggregates = { ...state.aggregates };
   if (previousAgg && previousAgg.count > 1) {
     const nextCount = previousAgg.count - 1;
-    aggregates[no] = {
+    aggregates[id] = {
       count: nextCount,
       avg: (previousAgg.avg * previousAgg.count - previousMine) / nextCount,
     };
   } else {
-    delete aggregates[no];
+    delete aggregates[id];
   }
   const myVotes = { ...state.myVotes };
-  delete myVotes[no];
+  delete myVotes[id];
   commit({ ...state, aggregates, myVotes });
   persistVotes();
 
@@ -199,22 +228,22 @@ export async function removeVote(no: number) {
     const res = await fetch("/api/spice", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ no, voterId }),
+      body: JSON.stringify({ id, voterId }),
     });
     if (!res.ok) throw new Error("failed");
     const data = await res.json();
     if (data && data.aggregate) {
       const next = { ...state.aggregates };
       const agg = data.aggregate as SpiceAggregate;
-      if (agg.count > 0) next[no] = agg;
-      else delete next[no];
+      if (agg.count > 0) next[id] = agg;
+      else delete next[id];
       commit({ ...state, aggregates: next });
     }
   } catch {
     const rollback = { ...state.aggregates };
-    if (previousAgg) rollback[no] = previousAgg;
-    else delete rollback[no];
-    const myVotesRollback = { ...state.myVotes, [no]: previousMine };
+    if (previousAgg) rollback[id] = previousAgg;
+    else delete rollback[id];
+    const myVotesRollback = { ...state.myVotes, [id]: previousMine };
     commit({ ...state, aggregates: rollback, myVotes: myVotesRollback });
     persistVotes();
   }

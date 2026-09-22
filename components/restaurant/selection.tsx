@@ -14,10 +14,11 @@ import {
 } from "@/lib/selection-store";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { ShareListButton } from "@/components/restaurant/share";
+import { SaveListButton } from "@/components/restaurant/saved-lists";
 
-/** Stable key for a dish (numbered dishes by number, extras by name). */
 export function dishKey(dish: Dish) {
-  return dish.no != null ? `n${dish.no}` : `x:${dish.name}`;
+  return dish.id;
 }
 
 const DISH_BY_KEY = new Map<string, Dish>();
@@ -166,10 +167,14 @@ export function OrderSummary() {
                 {total}&nbsp;kr
               </span>
             </button>
-            <Button variant="ghost" size="sm" onClick={clearSelection}>
-              <Trash2 className="size-4" />
-              Rensa
-            </Button>
+            <div className="flex items-center gap-1">
+              <SaveListButton />
+              <ShareListButton />
+              <Button variant="ghost" size="sm" onClick={clearSelection}>
+                <Trash2 className="size-4" />
+                Rensa
+              </Button>
+            </div>
           </div>
 
           <p className={cn("pb-3 text-xs text-muted-foreground", open && "hidden")}>
