@@ -46,7 +46,7 @@ export function SiteFooter() {
           <p className="max-w-xl">{site.disclaimer.text}</p>
           <p className="mt-1">
             {site.disclaimer.authorLabel}:{" "}
-            <Link href="https://github.com/fjohanssondev" className="text-amber-200 hover:underline">{site.disclaimer.author}</Link>
+            <Link href="https://fjohansson.dev" className="text-amber-200 hover:underline">{site.disclaimer.author}</Link>
           </p>
         </div>
       </div>
